@@ -1,0 +1,30 @@
+{
+  "name": "better-supabase-types",
+  "description": "A CLI tool to add exports for your supabase tables",
+  "repository": "FroggyPanda/better-supabase-types",
+  "bugs": "https://github.com/FroggyPanda/better-supabase-types/issues",
+  "author": "FroggyPanda",
+  "main": "dist/index.js",
+  "private": false,
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "lint": "tsc"
+  },
+  "bin": {
+    "better-supabase-types": "./dist/index.js"
+  },
+  "dependencies": {
+    "ts-morph": "^18.0.0",
+    "yargs": "^17.7.1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.13",
+    "@types/yargs": "^17.0.24",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}
+
