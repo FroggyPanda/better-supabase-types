@@ -7,8 +7,7 @@
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "noUncheckedIndexedAccess": true,
-    "noEmit": true
+    "noUncheckedIndexedAccess": true
   },
   "include": ["./src/**/*.ts"]
 }
