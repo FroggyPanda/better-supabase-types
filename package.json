@@ -13,7 +13,7 @@
     "lint": "tsc"
   },
   "bin": {
-    "better-supabase-types": "./dist/index.js"
+    "better-supabase-types": "./dist/index"
   },
   "dependencies": {
     "ts-morph": "^18.0.0",
