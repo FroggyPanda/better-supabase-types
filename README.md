@@ -1,3 +1,5 @@
+[![npm version](https://img.shields.io/npm/v/better-supabase-types.svg)](https://www.npmjs.com/package/better-supabase-types) [![npm](https://img.shields.io/npm/dt/better-supabase-types.svg)](https://www.npmjs.com/package/better-supabase-types) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
 # Better Supabase Types
 
 ---
