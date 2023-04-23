@@ -16,11 +16,13 @@
     "better-supabase-types": "./dist/index"
   },
   "dependencies": {
+    "prettier": "^2.8.8",
     "ts-morph": "^18.0.0",
     "yargs": "^17.7.1"
   },
   "devDependencies": {
     "@types/node": "^18.15.13",
+    "@types/prettier": "^2.7.2",
     "@types/yargs": "^17.0.24",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.1",
@@ -34,4 +36,3 @@
     "automatic"
   ]
 }
-

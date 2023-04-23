@@ -22,11 +22,17 @@ yargs(hideBin(process.argv))
             describe: 'Path to the output file',
             requiresArg: true,
           },
+          prettier: {
+            type: 'string',
+            alias: ['p'],
+            describe: 'Path to the prettier config file',
+            requiresArg: true,
+          }
         })
         .demandOption(['input', 'output']);
     },
     (argv) => {
-      generate(argv.input, argv.output);
+      generate(argv.input, argv.output, argv.prettier);
     }
   )
   .help()

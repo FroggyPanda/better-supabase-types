@@ -1,7 +1,7 @@
 import fs from 'fs';
-import { getTablesProperties } from './utils';
+import { getTablesProperties, prettierFormat } from './utils';
 
-export function generate(input: string, output: string) {
+export async function generate(input: string, output: string, prettierConfigPath?: string) {
   const inputFile = input;
   const outputFile = output;
 
@@ -19,7 +19,10 @@ export function generate(input: string, output: string) {
   }
 
   const fileContent = fs.readFileSync(inputFile, 'utf-8');
-  const updatedFileContent = fileContent + '\n' + types.join('\n') + '\n';
+  let updatedFileContent = fileContent + '\n' + types.join('\n') + '\n';
+  if (prettierConfigPath) {
+    updatedFileContent = await prettierFormat(updatedFileContent, prettierConfigPath);
+  }
 
   fs.writeFileSync(outputFile, updatedFileContent);
 }
