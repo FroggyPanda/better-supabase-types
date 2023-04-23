@@ -22,11 +22,26 @@ yargs(hideBin(process.argv))
             describe: 'Path to the output file',
             requiresArg: true,
           },
+          force: {
+            type: 'boolean',
+            alias: ['f'],
+            describe: 'Force the overwrite of the input file',
+          },
         })
-        .demandOption(['input', 'output']);
+        .demandOption(['input']);
     },
     (argv) => {
-      generate(argv.input, argv.output);
+      if (!argv.output && !argv.force) {
+        console.error(
+          'It looks like you want to overwrite your input file. Add the force flag to do that.'
+        );
+        return;
+      }
+
+      const input = argv.input;
+      const output = argv.output || argv.input;
+
+      generate(input, output);
     }
   )
   .help()
