@@ -2,10 +2,14 @@ import fs from 'fs';
 import { getTablesProperties } from './utils';
 
 export function generate(input: string, output: string) {
-  const inputFile = input;
-  const outputFile = output;
+  const exists = fs.existsSync(input);
 
-  const tablesProperties = getTablesProperties(inputFile);
+  if (!exists) {
+    console.error('Input file not found');
+    return;
+  }
+
+  const tablesProperties = getTablesProperties(input);
   const types: string[] = [];
 
   for (const table of tablesProperties) {
@@ -18,8 +22,8 @@ export function generate(input: string, output: string) {
     );
   }
 
-  const fileContent = fs.readFileSync(inputFile, 'utf-8');
+  const fileContent = fs.readFileSync(input, 'utf-8');
   const updatedFileContent = fileContent + '\n' + types.join('\n') + '\n';
 
-  fs.writeFileSync(outputFile, updatedFileContent);
+  fs.writeFileSync(output, updatedFileContent);
 }
