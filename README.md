@@ -47,4 +47,4 @@ Big thanks to [Barry](https://github.com/barrymichaeldoyle) for making the [Supa
 
 ## Contributions ➕
 
-Please contribute to this if you find any bugs or want any additions. This is my frist public package so please bear with me if there are any
+Please contribute to this if you find any bugs or want any additions. This is my first public package so please bear with me if there are any issues.
