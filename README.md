@@ -20,24 +20,34 @@ npx supabase gen types typescript --linked --schema public > ./src/schema.ts
 npx better-supabase-types -i ./src/schema.ts -o ./src/newSchema.ts
 ```
 
+### Overwrite input file
+
+If you would like to overwrite the input file with the better types output, you must supply the `force` flag (`-f`) to the generate command. In this scenario you won't need to provide the `output` option:
+
+```
+npx better-supabase-types -i ./src/schema.ts -f
+```
+
 ### Using Prettier Config 🎨
 
-If you have a `prettier` config set up in your project, you can take that into account by providing the `prettier` option (alias `p`) with the path to your config as the value like this:
+If your project uses `prettier` and you would this tool to use your `prettier` config you can supply the `-p` flag and that will format your output according to the `.prettierrc` in your route file.
 
 ```
 npx better-supabase-types -i ./src/schema.ts -o ./src/newSchema.ts -p .prettierrc
 ```
 
-Assuming your `prettier` config is in the `.prettierrc` file in the root of your project, this will use prettier to format your generated types.
+In the case that your `prettier` config file is not in the root of your project or is named `.prettier.json`, you can supply a value to the flag like this:
 
-If you provide the `-p` or `-prettier` flag without a value, the value will default to `.prettierrc`.
+```
+npx better-supabase-types -i ./src/schema.ts -o ./src/newSchema.ts -p ./configs/.prettier.json
+```
 
 ### Before 📉:
 
 ```ts
-import { Database } from "./src/schema.ts";
+import { Database } from './src/schema.ts';
 
-type Todo = Database["public"]["Tables"]["Todo"]["Row"];
+type Todo = Database['public']['Tables']['Todo']['Row'];
 
 const todos: Todo[] = [];
 ```
@@ -45,7 +55,7 @@ const todos: Todo[] = [];
 ### After 📈:
 
 ```ts
-import { Todo } from "./src/newSchema.ts";
+import { Todo } from './src/newSchema.ts';
 
 const todos: Todo[] = [];
 ```
