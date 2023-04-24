@@ -20,7 +20,7 @@ npx supabase gen types typescript --linked --schema public > ./src/schema.ts
 npx better-supabase-types -i ./src/schema.ts -o ./src/newSchema.ts
 ```
 
-### Overwrite input file
+### Overwrite input file ↩️
 
 If you would like to overwrite the input file with the better types output, you must supply the `force` flag (`-f`) to the generate command. In this scenario you won't need to provide the `output` option:
 
@@ -60,15 +60,10 @@ import { Todo } from './src/newSchema.ts';
 const todos: Todo[] = [];
 ```
 
-## Thanks 🙏
-
-Big thanks to [Barry](https://github.com/barrymichaeldoyle) for making the [Supabase React Query Codegen](https://github.com/barrymichaeldoyle/supabase-react-query-codegen) tool to help me understand on how to read the supabase type file.
-
-## Todo 📃
-
-- [ ] Have it possible to either make a new file or overwrite the input file
-- [x] Add option to take in prettier config
-
 ## Contributions ➕
 
 Please contribute to this if you find any bugs or want any additions. This is my first public package so please bear with me if there are any issues.
+
+### Thanks 🙏
+
+Big thanks to [Barry](https://github.com/barrymichaeldoyle) for making the [Supabase React Query Codegen](https://github.com/barrymichaeldoyle/supabase-react-query-codegen) tool to help me understand on how to read the supabase type file.
