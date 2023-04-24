@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { getTablesProperties, prettierFormat } from './utils';
+import { toPascalCase } from './utils/toPascalCase';
 
 export async function generate(input: string, output: string, prettierConfigPath?: string) {
   const exists = fs.existsSync(input);
@@ -14,11 +15,10 @@ export async function generate(input: string, output: string, prettierConfigPath
 
   for (const table of tablesProperties) {
     const tableName = table.getName();
-    const capitalTableName =
-      tableName.charAt(0).toUpperCase() + tableName.substring(1);
+    const tableNameType = toPascalCase(tableName);
 
     types.push(
-      `export type ${capitalTableName} = Database['public']['Tables']['${tableName}']['Row'];`
+      `export type ${tableNameType} = Database['public']['Tables']['${tableName}']['Row'];`
     );
   }
 
