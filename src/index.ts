@@ -22,6 +22,13 @@ yargs(hideBin(process.argv))
             describe: 'Path to the output file',
             requiresArg: true,
           },
+          prettier: {
+            type: 'string',
+            alias: ['p'],
+            describe: 'Path to the prettier config file',
+            requiresArg: false,
+            default: '.prettierrc',
+          },
           force: {
             type: 'boolean',
             alias: ['f'],
@@ -40,8 +47,9 @@ yargs(hideBin(process.argv))
 
       const input = argv.input;
       const output = argv.output || argv.input;
+      const prettier = argv.prettier;
 
-      generate(input, output);
+      generate(input, output, prettier);
     }
   )
   .help()

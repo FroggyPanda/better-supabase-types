@@ -20,6 +20,28 @@ npx supabase gen types typescript --linked --schema public > ./src/schema.ts
 npx better-supabase-types -i ./src/schema.ts -o ./src/newSchema.ts
 ```
 
+### Overwrite input file
+
+If you would like to overwrite the input file with the better types output, you must supply the `force` flag (`-f`) to the generate command. In this scenario you won't need to provide the `output` option:
+
+```
+npx better-supabase-types -i ./src/schema.ts -f
+```
+
+### Using Prettier Config 🎨
+
+If your project uses `prettier` and you would this tool to use your `prettier` config you can supply the `-p` flag and that will format your output according to the `.prettierrc` in your route file.
+
+```
+npx better-supabase-types -i ./src/schema.ts -o ./src/newSchema.ts -p .prettierrc
+```
+
+In the case that your `prettier` config file is not in the root of your project or is named `.prettier.json`, you can supply a value to the flag like this:
+
+```
+npx better-supabase-types -i ./src/schema.ts -o ./src/newSchema.ts -p ./configs/.prettier.json
+```
+
 ### Before 📉:
 
 ```ts
@@ -45,7 +67,7 @@ Big thanks to [Barry](https://github.com/barrymichaeldoyle) for making the [Supa
 ## Todo 📃
 
 - [ ] Have it possible to either make a new file or overwrite the input file
-- [ ] Add option to take in prettier config
+- [x] Add option to take in prettier config
 
 ## Contributions ➕
 
