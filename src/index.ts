@@ -28,12 +28,28 @@ yargs(hideBin(process.argv))
             describe: 'Path to the prettier config file',
             requiresArg: false,
             default: '.prettierrc',
-          }
+          },
+          force: {
+            type: 'boolean',
+            alias: ['f'],
+            describe: 'Force the overwrite of the input file',
+          },
         })
-        .demandOption(['input', 'output']);
+        .demandOption(['input']);
     },
     (argv) => {
-      generate(argv.input, argv.output, argv.prettier);
+      if (!argv.output && !argv.force) {
+        console.error(
+          'It looks like you want to overwrite your input file. Add the force flag to do that.'
+        );
+        return;
+      }
+
+      const input = argv.input;
+      const output = argv.output || argv.input;
+      const prettier = argv.prettier;
+
+      generate(input, output, prettier);
     }
   )
   .help()

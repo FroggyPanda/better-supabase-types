@@ -2,10 +2,14 @@ import fs from 'fs';
 import { getTablesProperties, prettierFormat } from './utils';
 
 export async function generate(input: string, output: string, prettierConfigPath?: string) {
-  const inputFile = input;
-  const outputFile = output;
+  const exists = fs.existsSync(input);
 
-  const tablesProperties = getTablesProperties(inputFile);
+  if (!exists) {
+    console.error('Input file not found');
+    return;
+  }
+
+  const tablesProperties = getTablesProperties(input);
   const types: string[] = [];
 
   for (const table of tablesProperties) {
@@ -18,11 +22,11 @@ export async function generate(input: string, output: string, prettierConfigPath
     );
   }
 
-  const fileContent = fs.readFileSync(inputFile, 'utf-8');
+  const fileContent = fs.readFileSync(input, 'utf-8');
   let updatedFileContent = fileContent + '\n' + types.join('\n') + '\n';
   if (prettierConfigPath) {
     updatedFileContent = await prettierFormat(updatedFileContent, prettierConfigPath);
   }
 
-  fs.writeFileSync(outputFile, updatedFileContent);
+  fs.writeFileSync(output, updatedFileContent);
 }
