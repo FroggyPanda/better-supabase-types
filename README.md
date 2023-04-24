@@ -28,6 +28,8 @@ npx better-supabase-types -i ./src/schema.ts -o ./src/newSchema.ts -p .prettierr
 
 Assuming your `prettier` config is in the `.prettierrc` file in the root of your project, this will use prettier to format your generated types.
 
+If you provide the `-p` or `-prettier` flag without a value, the value with default to `.prettierrc`.
+
 ### Before 📉:
 
 ```ts

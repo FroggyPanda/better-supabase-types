@@ -26,7 +26,8 @@ yargs(hideBin(process.argv))
             type: 'string',
             alias: ['p'],
             describe: 'Path to the prettier config file',
-            requiresArg: true,
+            requiresArg: false,
+            default: '.prettierrc',
           }
         })
         .demandOption(['input', 'output']);
