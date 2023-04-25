@@ -1,6 +1,5 @@
 import fs from 'fs';
-import { getTablesProperties, prettierFormat } from './utils';
-import { toPascalCase } from './utils/toPascalCase';
+import { getTablesProperties, prettierFormat, toPascalCase } from './utils';
 
 export async function generate(input: string, output: string, prettierConfigPath?: string) {
   const exists = fs.existsSync(input);
