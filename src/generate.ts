@@ -17,7 +17,10 @@ export async function generate(input: string, output: string, prettierConfigPath
     const tableNameType = toPascalCase(tableName);
 
     types.push(
-      `export type ${tableNameType} = Database['public']['Tables']['${tableName}']['Row'];`
+      `export type ${tableNameType} = Database['public']['Tables']['${tableName}']['Row'];`,
+      `export type Insert${tableNameType} = Database['public']['Tables']['${tableName}']['Insert'];`,
+      `export type Update${tableNameType} = Database['public']['Tables']['${tableName}']['Update'];`,
+      '\n'
     );
   }
 
