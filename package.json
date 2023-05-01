@@ -35,9 +35,5 @@
     "database",
     "developer-tools",
     "automatic"
-  ],
-  "betterConfig": {
-    "input": "./schema.ts",
-    "output": "./newSchema.ts"
-  }
+  ]
 }
