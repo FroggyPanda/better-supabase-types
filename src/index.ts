@@ -6,6 +6,8 @@ import { z } from 'zod';
 import fs from 'fs';
 
 const configExists = fs.existsSync('.betterrc.json');
+const prePackageJsonFile = fs.readFileSync('package.json', 'utf-8');
+const packageJsonFile = JSON.parse(prePackageJsonFile);
 
 // Load config from '.betterrc' file
 if (configExists) {
@@ -25,6 +27,34 @@ if (configExists) {
   const result = schema.safeParse(json);
   if (!result.success) {
     console.log('Invalid config file');
+  } else {
+    if (!result.data.output && !result.data.force) {
+      console.log(
+        'It looks like you want to overwrite your input file. Add the force property to do that in your config file.'
+      );
+    } else {
+      const input = result.data.input;
+      const output = result.data.output || result.data.input;
+      const prettier = result.data.prettier;
+
+      generate(input, output, prettier);
+    }
+  }
+} else if (packageJsonFile['betterConfig']) {
+  // Load config from 'package.json' file
+  const schema = z
+    .object({
+      input: z.string(),
+      output: z.string().optional(),
+      force: z.boolean().optional(),
+      prettier: z.string().optional().default('.prettierrc'),
+    })
+    .strict();
+
+  // Check if config is correct
+  const result = schema.safeParse(packageJsonFile['betterConfig']);
+  if (!result.success) {
+    console.log('Invalid config in package.json');
   } else {
     if (!result.data.output && !result.data.force) {
       console.log(
