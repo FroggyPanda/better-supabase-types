@@ -2,8 +2,6 @@
 
 # Better Supabase Types
 
----
-
 A CLI tool to add exports for your supabase tables. It will add type exports at the bottom of a new typescript file of every table you have. This tool can help remove the need to make a type for their rows manually.
 
 ## Usage 🔨
@@ -14,7 +12,7 @@ A CLI tool to add exports for your supabase tables. It will add type exports at 
 npx supabase gen types typescript --linked --schema public > ./src/schema.ts
 ```
 
-2. Run the `better-supabase-types` command!
+2. Run the `better-supabase-types` command (you can also use a [config file](#config-file-⚙)):
 
 ```bash
 npx better-supabase-types -i ./src/schema.ts -o ./src/newSchema.ts
@@ -22,7 +20,7 @@ npx better-supabase-types -i ./src/schema.ts -o ./src/newSchema.ts
 
 ### Overwrite input file ↩️
 
-If you would like to overwrite the input file with the better types output, you must supply the `force` flag (`-f`) to the generate command. In this scenario you won't need to provide the `output` option:
+If you would like to overwrite the input file with the better types output, you must supply the `force` flag (`-f`) to the generate command:
 
 ```
 npx better-supabase-types -i ./src/schema.ts -f
@@ -30,16 +28,10 @@ npx better-supabase-types -i ./src/schema.ts -f
 
 ### Using Prettier Config 🎨
 
-If your project uses `prettier` and you would this tool to use your `prettier` config you can supply the `-p` flag and that will format your output according to the `.prettierrc` in your route file.
+If your project uses `prettier` this tool will automattically read it from your `.prettierrc` file! In the case that your `prettier` config file is not in the root of your project or is named `.prettierrc`, you can supply a value to the flag like this:
 
-```
-npx better-supabase-types -i ./src/schema.ts -o ./src/newSchema.ts -p .prettierrc
-```
-
-In the case that your `prettier` config file is not in the root of your project or is named `.prettier.json`, you can supply a value to the flag like this:
-
-```
-npx better-supabase-types -i ./src/schema.ts -o ./src/newSchema.ts -p ./configs/.prettier.json
+```bash
+npx better-supabase-types -i ./src/schema.ts -o ./src/newSchema.ts -p ./configs/.prettierrc.yaml
 ```
 
 ### Before 📉:
@@ -58,6 +50,32 @@ const todos: Todo[] = [];
 import { Todo } from './src/newSchema.ts';
 
 const todos: Todo[] = [];
+```
+
+### Config file ⚙:
+
+You can also use a config named `betterrc.json`:
+
+```json
+{
+  "input": "./src/schema.ts",
+  "force": true
+}
+```
+
+#### package.json 📦
+
+You can also put your config file in your `package.json` file:
+
+```json
+{
+  "name": "better-supabase-types",
+  "...": "...",
+  "betterConfig": {
+    "input": "./schema.ts",
+    "output": "./newSchema.ts"
+  }
+}
 ```
 
 ## Contributions ➕
