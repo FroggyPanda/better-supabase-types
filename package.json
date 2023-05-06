@@ -5,6 +5,7 @@
   "bugs": "https://github.com/FroggyPanda/better-supabase-types/issues",
   "author": "FroggyPanda",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "private": false,
   "version": "2.2.0",
   "license": "MIT",
