@@ -1,11 +1,17 @@
 import fs from 'fs';
-import { getTablesProperties, prettierFormat, toPascalCase } from './utils';
+import {
+  getEnumValuesText,
+  getEnumsProperties,
+  getSchemasProperties,
+  getTablesProperties,
+  prettierFormat,
+  toPascalCase,
+} from './utils';
 
 export async function generate(
   input: string,
   output: string,
   prettierConfigPath?: string,
-  schemas: string[] = ['public'],
   makeSingular: boolean = false
 ) {
   const exists = fs.existsSync(input);
@@ -17,17 +23,32 @@ export async function generate(
 
   const types: string[] = [];
 
+  const schemas = getSchemasProperties(input);
   for (const schema of schemas) {
-    const tablesProperties = getTablesProperties(input, schema);
+    const schemaName = schema.getName();
+    const tablesProperties = getTablesProperties(input, schemaName);
+    const enumsProperties = getEnumsProperties(input, schemaName);
+
+    for (const enumProperty of enumsProperties) {
+      const enumName = enumProperty.getName();
+      const enumNameType = toPascalCase(enumName, makeSingular);
+
+      types.push(
+        `export enum ${enumNameType} {`,
+        ...(getEnumValuesText(enumProperty) ?? []),
+        '}',
+        '\n'
+      );
+    }
 
     for (const table of tablesProperties) {
       const tableName = table.getName();
       const tableNameType = toPascalCase(tableName, makeSingular);
 
       types.push(
-        `export type ${tableNameType} = Database['${schema}']['Tables']['${tableName}']['Row'];`,
-        `export type Insert${tableNameType} = Database['${schema}']['Tables']['${tableName}']['Insert'];`,
-        `export type Update${tableNameType} = Database['${schema}']['Tables']['${tableName}']['Update'];`,
+        `export type ${tableNameType} = Database['${schemaName}']['Tables']['${tableName}']['Row'];`,
+        `export type Insert${tableNameType} = Database['${schemaName}']['Tables']['${tableName}']['Insert'];`,
+        `export type Update${tableNameType} = Database['${schemaName}']['Tables']['${tableName}']['Update'];`,
         '\n'
       );
     }

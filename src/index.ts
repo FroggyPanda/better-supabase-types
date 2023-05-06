@@ -18,7 +18,6 @@ if (configExists) {
       output: z.string().optional(),
       force: z.boolean().optional(),
       prettier: z.string().optional().default('.prettierrc'),
-      schemas: z.array(z.string()).optional().default(['public']),
       singular: z.boolean().optional().default(false),
     })
     .strict();
@@ -39,10 +38,9 @@ if (configExists) {
       const input = result.data.input;
       const output = result.data.output || result.data.input;
       const prettier = result.data.prettier;
-      const schemas = result.data.schemas;
       const singular = result.data.singular ?? false;
 
-      generate(input, output, prettier, schemas, singular);
+      generate(input, output, prettier, singular);
     }
   }
 } else if (packageJsonFile['betterConfig']) {
@@ -53,7 +51,6 @@ if (configExists) {
       output: z.string().optional(),
       force: z.boolean().optional(),
       prettier: z.string().optional().default('.prettierrc'),
-      schemas: z.array(z.string()).optional().default(['public']),
       singular: z.boolean().optional().default(false),
     })
     .strict();
@@ -71,10 +68,9 @@ if (configExists) {
       const input = result.data.input;
       const output = result.data.output || result.data.input;
       const prettier = result.data.prettier;
-      const schemas = result.data.schemas;
       const singular = result.data.singular ?? false;
 
-      generate(input, output, prettier, schemas, singular);
+      generate(input, output, prettier, singular);
     }
   }
 } else {
@@ -110,17 +106,11 @@ if (configExists) {
               alias: ['f'],
               describe: 'Force the overwrite of the input file',
             },
-            schemas: {
-              type: 'array',
-              alias: ['s'],
-              describe: 'List of schema names to include in the output',
-              requiresArg: false,
-              default: ['public'],
-            },
             singular: {
               type: 'boolean',
-              alias: ['sg'],
-              describe: 'Convert table names to singular form instead of plural form',
+              alias: ['s'],
+              describe:
+                'Convert table names to singular form instead of plural form',
               requiresArg: false,
               default: false,
             },
@@ -138,19 +128,9 @@ if (configExists) {
         const input = argv.input;
         const output = argv.output || argv.input;
         const prettier = argv.prettier;
-        const schemaArgs: (string|number)[] = argv.schemas;
-        const schemas = schemaArgs.reduce((acc: string[], schema: string|number): string[] => {
-          if (isString(schema)) {
-            acc.push(schema);
-          }
-          else {
-            acc.push(schema.toString());
-          }
-          return acc;
-        }, []);
         const singular = argv.singular ?? false;
 
-        generate(input, output, prettier, schemas, singular);
+        generate(input, output, prettier, singular);
       }
     )
     .help()

@@ -21,8 +21,12 @@ export function getTablesProperties(typesPath: string, schema: string) {
     .getApparentProperties()
     .find((property) => property.getName() === 'Tables');
 
-  if (!tablesProperty)
-    throw new Error('No Tables property found within the Database interface.');
+  if (!tablesProperty) {
+    console.log(
+      `No Tables property found within the Database interface for schema ${schema}.`
+    );
+    return [];
+  }
 
   const tablesType = project
     .getProgram()
@@ -30,8 +34,12 @@ export function getTablesProperties(typesPath: string, schema: string) {
     .getTypeAtLocation(tablesProperty.getValueDeclarationOrThrow());
   const tablesProperties = tablesType.getProperties();
 
-  if (tablesProperties.length < 1)
-    throw new Error('No tables found within the Tables property.');
+  if (tablesProperties.length < 1) {
+    console.log(
+      `No tables found within the Tables property for schema ${schema}.`
+    );
+    return [];
+  }
 
   return tablesProperties;
 }
