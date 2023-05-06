@@ -5,8 +5,9 @@
   "bugs": "https://github.com/FroggyPanda/better-supabase-types/issues",
   "author": "FroggyPanda",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "private": false,
-  "version": "2.2.0",
+  "version": "2.3.0",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
@@ -16,6 +17,7 @@
     "better-supabase-types": "./dist/index.js"
   },
   "dependencies": {
+    "pluralize": "^8.0.0",
     "prettier": "^2.8.8",
     "ts-morph": "^18.0.0",
     "yargs": "^17.7.1",
@@ -23,6 +25,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.15.13",
+    "@types/pluralize": "^0.0.29",
     "@types/prettier": "^2.7.2",
     "@types/yargs": "^17.0.24",
     "nodemon": "^2.0.22",

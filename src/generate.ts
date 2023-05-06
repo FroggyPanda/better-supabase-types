@@ -1,7 +1,19 @@
 import fs from 'fs';
-import { getTablesProperties, prettierFormat, toPascalCase } from './utils';
+import {
+  getEnumValuesText,
+  getEnumsProperties,
+  getSchemasProperties,
+  getTablesProperties,
+  prettierFormat,
+  toPascalCase,
+} from './utils';
 
-export async function generate(input: string, output: string, prettierConfigPath?: string) {
+export async function generate(
+  input: string,
+  output: string,
+  prettierConfigPath?: string,
+  makeSingular: boolean = false
+) {
   const exists = fs.existsSync(input);
 
   if (!exists) {
@@ -9,25 +21,46 @@ export async function generate(input: string, output: string, prettierConfigPath
     return;
   }
 
-  const tablesProperties = getTablesProperties(input);
   const types: string[] = [];
 
-  for (const table of tablesProperties) {
-    const tableName = table.getName();
-    const tableNameType = toPascalCase(tableName);
+  const schemas = getSchemasProperties(input);
+  for (const schema of schemas) {
+    const schemaName = schema.getName();
+    const tablesProperties = getTablesProperties(input, schemaName);
+    const enumsProperties = getEnumsProperties(input, schemaName);
 
-    types.push(
-      `export type ${tableNameType} = Database['public']['Tables']['${tableName}']['Row'];`,
-      `export type Insert${tableNameType} = Database['public']['Tables']['${tableName}']['Insert'];`,
-      `export type Update${tableNameType} = Database['public']['Tables']['${tableName}']['Update'];`,
-      '\n'
-    );
+    for (const enumProperty of enumsProperties) {
+      const enumName = enumProperty.getName();
+      const enumNameType = toPascalCase(enumName, makeSingular);
+
+      types.push(
+        `export enum ${enumNameType} {`,
+        ...(getEnumValuesText(enumProperty) ?? []),
+        '}',
+        '\n'
+      );
+    }
+
+    for (const table of tablesProperties) {
+      const tableName = table.getName();
+      const tableNameType = toPascalCase(tableName, makeSingular);
+
+      types.push(
+        `export type ${tableNameType} = Database['${schemaName}']['Tables']['${tableName}']['Row'];`,
+        `export type Insert${tableNameType} = Database['${schemaName}']['Tables']['${tableName}']['Insert'];`,
+        `export type Update${tableNameType} = Database['${schemaName}']['Tables']['${tableName}']['Update'];`,
+        '\n'
+      );
+    }
   }
 
   const fileContent = fs.readFileSync(input, 'utf-8');
   let updatedFileContent = fileContent + '\n' + types.join('\n') + '\n';
   if (prettierConfigPath) {
-    updatedFileContent = await prettierFormat(updatedFileContent, prettierConfigPath);
+    updatedFileContent = await prettierFormat(
+      updatedFileContent,
+      prettierConfigPath
+    );
   }
 
   fs.writeFileSync(output, updatedFileContent);

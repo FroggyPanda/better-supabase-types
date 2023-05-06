@@ -8,6 +8,7 @@ import fs from 'fs';
 const configExists = fs.existsSync('.betterrc.json');
 const prePackageJsonFile = fs.readFileSync('package.json', 'utf-8');
 const packageJsonFile = JSON.parse(prePackageJsonFile);
+const isString = (item: unknown): item is string => typeof item === 'string';
 
 // Load config from '.betterrc' file
 if (configExists) {
@@ -17,6 +18,7 @@ if (configExists) {
       output: z.string().optional(),
       force: z.boolean().optional(),
       prettier: z.string().optional().default('.prettierrc'),
+      singular: z.boolean().optional().default(false),
     })
     .strict();
 
@@ -36,8 +38,9 @@ if (configExists) {
       const input = result.data.input;
       const output = result.data.output || result.data.input;
       const prettier = result.data.prettier;
+      const singular = result.data.singular ?? false;
 
-      generate(input, output, prettier);
+      generate(input, output, prettier, singular);
     }
   }
 } else if (packageJsonFile['betterConfig']) {
@@ -48,6 +51,7 @@ if (configExists) {
       output: z.string().optional(),
       force: z.boolean().optional(),
       prettier: z.string().optional().default('.prettierrc'),
+      singular: z.boolean().optional().default(false),
     })
     .strict();
 
@@ -64,8 +68,9 @@ if (configExists) {
       const input = result.data.input;
       const output = result.data.output || result.data.input;
       const prettier = result.data.prettier;
+      const singular = result.data.singular ?? false;
 
-      generate(input, output, prettier);
+      generate(input, output, prettier, singular);
     }
   }
 } else {
@@ -101,6 +106,14 @@ if (configExists) {
               alias: ['f'],
               describe: 'Force the overwrite of the input file',
             },
+            singular: {
+              type: 'boolean',
+              alias: ['s'],
+              describe:
+                'Convert table names to singular form instead of plural form',
+              requiresArg: false,
+              default: false,
+            },
           })
           .demandOption(['input']);
       },
@@ -115,8 +128,9 @@ if (configExists) {
         const input = argv.input;
         const output = argv.output || argv.input;
         const prettier = argv.prettier;
+        const singular = argv.singular ?? false;
 
-        generate(input, output, prettier);
+        generate(input, output, prettier, singular);
       }
     )
     .help()
