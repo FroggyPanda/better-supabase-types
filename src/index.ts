@@ -8,20 +8,19 @@ import fs from 'fs';
 const configExists = fs.existsSync('.betterrc.json');
 const prePackageJsonFile = fs.readFileSync('package.json', 'utf-8');
 const packageJsonFile = JSON.parse(prePackageJsonFile);
-const isString = (item: unknown): item is string => typeof item === 'string';
+
+const schema = z
+  .object({
+    input: z.string(),
+    output: z.string().optional(),
+    force: z.boolean().optional(),
+    prettier: z.string().optional().default('.prettierrc'),
+    singular: z.boolean().optional().default(false),
+  })
+  .strict();
 
 // Load config from '.betterrc' file
 if (configExists) {
-  const schema = z
-    .object({
-      input: z.string(),
-      output: z.string().optional(),
-      force: z.boolean().optional(),
-      prettier: z.string().optional().default('.prettierrc'),
-      singular: z.boolean().optional().default(false),
-    })
-    .strict();
-
   const prefile = fs.readFileSync('.betterrc.json', 'utf-8');
   const json = JSON.parse(prefile);
 
@@ -45,15 +44,6 @@ if (configExists) {
   }
 } else if (packageJsonFile['betterConfig']) {
   // Load config from 'package.json' file
-  const schema = z
-    .object({
-      input: z.string(),
-      output: z.string().optional(),
-      force: z.boolean().optional(),
-      prettier: z.string().optional().default('.prettierrc'),
-      singular: z.boolean().optional().default(false),
-    })
-    .strict();
 
   // Check if config is correct
   const result = schema.safeParse(packageJsonFile['betterConfig']);
