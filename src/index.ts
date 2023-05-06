@@ -8,6 +8,7 @@ import fs from 'fs';
 const configExists = fs.existsSync('.betterrc.json');
 const prePackageJsonFile = fs.readFileSync('package.json', 'utf-8');
 const packageJsonFile = JSON.parse(prePackageJsonFile);
+const isString = (item: unknown): item is string => typeof item === 'string';
 
 // Load config from '.betterrc' file
 if (configExists) {
@@ -17,6 +18,7 @@ if (configExists) {
       output: z.string().optional(),
       force: z.boolean().optional(),
       prettier: z.string().optional().default('.prettierrc'),
+      schemas: z.array(z.string()).optional().default(['public']),
     })
     .strict();
 
@@ -36,8 +38,9 @@ if (configExists) {
       const input = result.data.input;
       const output = result.data.output || result.data.input;
       const prettier = result.data.prettier;
+      const schemas = result.data.schemas;
 
-      generate(input, output, prettier);
+      generate(input, output, prettier, schemas);
     }
   }
 } else if (packageJsonFile['betterConfig']) {
@@ -48,6 +51,7 @@ if (configExists) {
       output: z.string().optional(),
       force: z.boolean().optional(),
       prettier: z.string().optional().default('.prettierrc'),
+      schemas: z.array(z.string()).optional().default(['public']),
     })
     .strict();
 
@@ -64,8 +68,9 @@ if (configExists) {
       const input = result.data.input;
       const output = result.data.output || result.data.input;
       const prettier = result.data.prettier;
+      const schemas = result.data.schemas;
 
-      generate(input, output, prettier);
+      generate(input, output, prettier, schemas);
     }
   }
 } else {
@@ -101,6 +106,13 @@ if (configExists) {
               alias: ['f'],
               describe: 'Force the overwrite of the input file',
             },
+            schemas: {
+              type: 'array',
+              alias: ['s'],
+              describe: 'List of schema names to include in the output',
+              requiresArg: false,
+              default: ['public'],
+            },
           })
           .demandOption(['input']);
       },
@@ -115,8 +127,18 @@ if (configExists) {
         const input = argv.input;
         const output = argv.output || argv.input;
         const prettier = argv.prettier;
+        const schemaArgs: (string|number)[] = argv.schemas;
+        const schemas = schemaArgs.reduce((acc: string[], schema: string|number): string[] => {
+          if (isString(schema)) {
+            acc.push(schema);
+          }
+          else {
+            acc.push(schema.toString());
+          }
+          return acc;
+        }, []);
 
-        generate(input, output, prettier);
+        generate(input, output, prettier, schemas);
       }
     )
     .help()

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { getTablesProperties, prettierFormat, toPascalCase } from './utils';
 
-export async function generate(input: string, output: string, prettierConfigPath?: string) {
+export async function generate(input: string, output: string, prettierConfigPath?: string, schemas: string[] = ['public']) {
   const exists = fs.existsSync(input);
 
   if (!exists) {
@@ -9,7 +9,7 @@ export async function generate(input: string, output: string, prettierConfigPath
     return;
   }
 
-  const tablesProperties = getTablesProperties(input);
+  const tablesProperties = schemas.flatMap((schema) => getTablesProperties(input, schema));
   const types: string[] = [];
 
   for (const table of tablesProperties) {

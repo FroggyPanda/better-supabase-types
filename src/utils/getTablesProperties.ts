@@ -1,6 +1,6 @@
 import { ModuleKind, Project, ScriptTarget } from 'ts-morph';
 
-export function getTablesProperties(typesPath: string) {
+export function getTablesProperties(typesPath: string, schema: string) {
   const project = new Project({
     compilerOptions: {
       allowSyntheticDefaultImports: true,
@@ -14,7 +14,7 @@ export function getTablesProperties(typesPath: string) {
   const sourceFile = project.addSourceFileAtPath(typesPath);
 
   const databaseInterface = sourceFile.getInterfaceOrThrow('Database');
-  const publicProperty = databaseInterface.getPropertyOrThrow('public');
+  const publicProperty = databaseInterface.getPropertyOrThrow(schema);
   const publicType = publicProperty.getType();
 
   const tablesProperty = publicType
