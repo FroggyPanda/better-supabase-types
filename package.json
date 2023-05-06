@@ -5,12 +5,13 @@
   "bugs": "https://github.com/FroggyPanda/better-supabase-types/issues",
   "author": "FroggyPanda",
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "private": false,
   "version": "2.3.0",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "tsup ./src/index.ts --format cjs,esm --dts",
     "lint": "tsc"
   },
   "bin": {
@@ -30,6 +31,7 @@
     "@types/yargs": "^17.0.24",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.1",
+    "tsup": "^6.7.0",
     "typescript": "^5.0.4"
   },
   "keywords": [

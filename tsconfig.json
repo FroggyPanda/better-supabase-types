@@ -8,7 +8,8 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "noUncheckedIndexedAccess": true,
-    "declaration": true
+    "noUnusedLocals": true,
+    "noEmit": true
   },
   "include": [
     "./src/**/*.ts"
