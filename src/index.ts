@@ -19,6 +19,7 @@ if (configExists) {
       force: z.boolean().optional(),
       prettier: z.string().optional().default('.prettierrc'),
       schemas: z.array(z.string()).optional().default(['public']),
+      singular: z.boolean().optional().default(false),
     })
     .strict();
 
@@ -39,8 +40,9 @@ if (configExists) {
       const output = result.data.output || result.data.input;
       const prettier = result.data.prettier;
       const schemas = result.data.schemas;
+      const singular = result.data.singular ?? false;
 
-      generate(input, output, prettier, schemas);
+      generate(input, output, prettier, schemas, singular);
     }
   }
 } else if (packageJsonFile['betterConfig']) {
@@ -52,6 +54,7 @@ if (configExists) {
       force: z.boolean().optional(),
       prettier: z.string().optional().default('.prettierrc'),
       schemas: z.array(z.string()).optional().default(['public']),
+      singular: z.boolean().optional().default(false),
     })
     .strict();
 
@@ -69,8 +72,9 @@ if (configExists) {
       const output = result.data.output || result.data.input;
       const prettier = result.data.prettier;
       const schemas = result.data.schemas;
+      const singular = result.data.singular ?? false;
 
-      generate(input, output, prettier, schemas);
+      generate(input, output, prettier, schemas, singular);
     }
   }
 } else {
@@ -113,6 +117,13 @@ if (configExists) {
               requiresArg: false,
               default: ['public'],
             },
+            singular: {
+              type: 'boolean',
+              alias: ['sg'],
+              describe: 'Convert table names to singular form instead of plural form',
+              requiresArg: false,
+              default: false,
+            },
           })
           .demandOption(['input']);
       },
@@ -137,8 +148,9 @@ if (configExists) {
           }
           return acc;
         }, []);
+        const singular = argv.singular ?? false;
 
-        generate(input, output, prettier, schemas);
+        generate(input, output, prettier, schemas, singular);
       }
     )
     .help()
