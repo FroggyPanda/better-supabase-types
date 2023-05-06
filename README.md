@@ -22,7 +22,7 @@ npx better-supabase-types -i ./src/schema.ts -o ./src/newSchema.ts
 
 If you would like to overwrite the input file with the better types output, you must supply the `force` flag (`-f`) to the generate command:
 
-```
+```bash
 npx better-supabase-types -i ./src/schema.ts -f
 ```
 
@@ -34,7 +34,23 @@ If your project uses `prettier` this tool will automattically read it from your 
 npx better-supabase-types -i ./src/schema.ts -o ./src/newSchema.ts -p ./configs/.prettierrc.yaml
 ```
 
-### Before 📉:
+### Creating singular model type names from plural table names
+
+If you use the common naming pattern of having plural table names, it can be confusing when the model type is also a plural, as it gives the impression that it represents more than one record. You can ask `better-supabase-types` to transform the model type name into the singular form (using the `pluralize` library) with the `singular` flag (`-s`). By default this is set to false (turned off).
+
+```bash
+npx better-supabase-types -i ./src/schema.ts -o ./src/newSchema.ts -s
+```
+
+Example schema output with the `singular` flag turned on:
+
+```ts
+export type Account = Database['public']['Tables']['accounts']['Row'];
+export type InsertAccount = Database['public']['Tables']['accounts']['Insert'];
+export type UpdateAccount = Database['public']['Tables']['accounts']['Update'];
+```
+
+### Before 📉
 
 ```ts
 import { Database } from './src/schema.ts';
@@ -44,7 +60,7 @@ type Todo = Database['public']['Tables']['Todo']['Row'];
 const todos: Todo[] = [];
 ```
 
-### After 📈:
+### After 📈
 
 ```ts
 import { Todo } from './src/newSchema.ts';
@@ -52,14 +68,15 @@ import { Todo } from './src/newSchema.ts';
 const todos: Todo[] = [];
 ```
 
-### Config file ⚙:
+### Config file ⚙
 
 You can also use a config named `betterrc.json`:
 
 ```json
 {
   "input": "./src/schema.ts",
-  "force": true
+  "force": true,
+  "singular": true
 }
 ```
 
