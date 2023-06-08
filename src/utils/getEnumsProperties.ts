@@ -6,6 +6,8 @@ import {
   ts,
 } from 'ts-morph';
 
+import { toCamelCase } from './toCamelCase'
+
 export function getEnumsProperties(typesPath: string, schema: string) {
   const project = new Project({
     compilerOptions: {
@@ -51,7 +53,14 @@ export function getEnumsProperties(typesPath: string, schema: string) {
 }
 
 function getEnumValueLabel(value: LiteralTypeNode) {
-  return value.getText().replace(/"/g, '').replace(/ /g, '_');
+  let enumValue = value.getText().replace(/"/g, '');
+  if(enumValue.includes(' ')) {
+    enumValue.replace(/ /g, '_');
+  }
+  if(enumValue.includes('.')) {
+    enumValue = toCamelCase(enumValue, '.');
+  }
+  return enumValue
 }
 
 function getEnumValueText(value: LiteralTypeNode) {
