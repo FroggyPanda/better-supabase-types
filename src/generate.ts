@@ -2,6 +2,7 @@ import fs from 'fs';
 import {
   getEnumValuesText,
   getEnumsProperties,
+  getFunctionReturnTypes,
   getSchemasProperties,
   getTablesProperties,
   prettierFormat,
@@ -28,6 +29,7 @@ export async function generate(
     const schemaName = schema.getName();
     const tablesProperties = getTablesProperties(input, schemaName);
     const enumsProperties = getEnumsProperties(input, schemaName);
+    const functionProperties = getFunctionReturnTypes(input, schemaName);
 
     for (const enumProperty of enumsProperties) {
       const enumName = enumProperty.getName();
@@ -49,6 +51,16 @@ export async function generate(
         `export type ${tableNameType} = Database['${schemaName}']['Tables']['${tableName}']['Row'];`,
         `export type Insert${tableNameType} = Database['${schemaName}']['Tables']['${tableName}']['Insert'];`,
         `export type Update${tableNameType} = Database['${schemaName}']['Tables']['${tableName}']['Update'];`,
+        '\n'
+      );
+    }
+    for (const functionProperty of functionProperties) {
+      const functionName = functionProperty.getName();
+      const functionNameType = toPascalCase(functionName, makeSingular);
+
+      types.push(
+        `export type Args${functionNameType} = Database['${schemaName}']['Functions']['${functionName}']['Args'];`,
+        `export type ReturnType${functionNameType} = Database['${schemaName}']['Functions']['${functionName}']['Returns'];`,
         '\n'
       );
     }
