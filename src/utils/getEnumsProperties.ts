@@ -57,6 +57,9 @@ function getEnumValueLabel(value: LiteralTypeNode) {
   if(enumValue.includes(' ')) {
     enumValue.replace(/ /g, '_');
   }
+  if(enumValue.includes('-')) {
+    enumValue.replace(/-/g, '_');
+  }
   if(enumValue.includes('.')) {
     enumValue = toCamelCase(enumValue, '.');
   }
