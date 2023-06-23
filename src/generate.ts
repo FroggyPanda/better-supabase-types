@@ -2,6 +2,7 @@ import fs from 'fs';
 import {
   getEnumValuesText,
   getEnumsProperties,
+  getFunctionReturnTypes,
   getSchemasProperties,
   getTablesProperties,
   prettierFormat,
@@ -25,10 +26,16 @@ export async function generate(
 
   const schemas = getSchemasProperties(input);
   for (const schema of schemas) {
+    types.push(`//Schema: ${schema.getName()}`);
+    
     const schemaName = schema.getName();
     const tablesProperties = getTablesProperties(input, schemaName);
     const enumsProperties = getEnumsProperties(input, schemaName);
+    const functionProperties = getFunctionReturnTypes(input, schemaName);
 
+    if (enumsProperties.length > 0) {
+      types.push('//Enums');
+    }
     for (const enumProperty of enumsProperties) {
       const enumName = enumProperty.getName();
       const enumNameType = toPascalCase(enumName, makeSingular);
@@ -41,6 +48,9 @@ export async function generate(
       );
     }
 
+    if (tablesProperties.length > 0) {
+      types.push('//Tables');
+    }
     for (const table of tablesProperties) {
       const tableName = table.getName();
       const tableNameType = toPascalCase(tableName, makeSingular);
@@ -49,6 +59,20 @@ export async function generate(
         `export type ${tableNameType} = Database['${schemaName}']['Tables']['${tableName}']['Row'];`,
         `export type Insert${tableNameType} = Database['${schemaName}']['Tables']['${tableName}']['Insert'];`,
         `export type Update${tableNameType} = Database['${schemaName}']['Tables']['${tableName}']['Update'];`,
+        '\n'
+      );
+    }
+
+    if (functionProperties.length > 0) {
+      types.push('//Functions');
+    }
+    for (const functionProperty of functionProperties) {
+      const functionName = functionProperty.getName();
+      const functionNameType = toPascalCase(functionName, makeSingular);
+
+      types.push(
+        `export type Args${functionNameType} = Database['${schemaName}']['Functions']['${functionName}']['Args'];`,
+        `export type ReturnType${functionNameType} = Database['${schemaName}']['Functions']['${functionName}']['Returns'];`,
         '\n'
       );
     }
