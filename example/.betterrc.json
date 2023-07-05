@@ -1,0 +1,13 @@
+{
+  "input": "test.ts",
+  "output": "test2.ts",
+  "singular": true,
+  "json": {
+    "guild": {
+      "level_ranks": {
+        "role_id": "string",
+        "level": "number"
+      }
+    }
+  }
+}
