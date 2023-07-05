@@ -9,13 +9,35 @@ const configExists = fs.existsSync('.betterrc.json');
 const prePackageJsonFile = fs.readFileSync('package.json', 'utf-8');
 const packageJsonFile = JSON.parse(prePackageJsonFile);
 
-const schema = z
+export const schema = z
   .object({
     input: z.string(),
     output: z.string().optional(),
     force: z.boolean().optional(),
     prettier: z.string().optional().default('.prettierrc'),
     singular: z.boolean().optional().default(false),
+    json: z
+      .record(
+        z.record(
+          z.record(
+            z.union([
+              z.literal('string'),
+              z.literal('number'),
+              z.literal('boolean'),
+              z.literal('null'),
+              z.array(
+                z.union([
+                  z.literal('string'),
+                  z.literal('number'),
+                  z.literal('boolean'),
+                  z.literal('null'),
+                ])
+              ),
+            ])
+          )
+        )
+      )
+      .optional(),
   })
   .strict();
 
@@ -26,8 +48,26 @@ if (configExists) {
 
   // Check if config is correct
   const result = schema.safeParse(json);
+  // Report Error
   if (!result.success) {
     console.log('Invalid config file');
+
+    // Loop through the issues
+    result.error.issues.forEach((error) => {
+      console.log(`Error code: ${error.code}`);
+
+      // For some reason the ZodIssue type does not have these in its type
+      // @ts-ignore
+      if (error?.expected) console.log(`Expected: ${error?.expected}`);
+      // @ts-ignore
+      if (error?.received) console.log(`Received: ${error?.received}`);
+
+      let resultPath = '';
+      error.path.forEach((partPath) => {
+        resultPath += `/${partPath}`;
+      });
+      console.log(`Path: ${resultPath} \n`);
+    });
   } else {
     if (!result.data.output && !result.data.force) {
       console.log(
@@ -38,8 +78,9 @@ if (configExists) {
       const output = result.data.output || result.data.input;
       const prettier = result.data.prettier;
       const singular = result.data.singular ?? false;
+      const jsonType = result.data.json;
 
-      generate(input, output, prettier, singular);
+      generate(input, output, prettier, singular, jsonType);
     }
   }
 } else if (packageJsonFile['betterConfig']) {
@@ -59,8 +100,9 @@ if (configExists) {
       const output = result.data.output || result.data.input;
       const prettier = result.data.prettier;
       const singular = result.data.singular ?? false;
+      const jsonType = result.data.json;
 
-      generate(input, output, prettier, singular);
+      generate(input, output, prettier, singular, jsonType);
     }
   }
 } else {
@@ -120,7 +162,7 @@ if (configExists) {
         const prettier = argv.prettier;
         const singular = argv.singular ?? false;
 
-        generate(input, output, prettier, singular);
+        generate(input, output, prettier, singular, undefined);
       }
     )
     .help()

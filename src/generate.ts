@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { z } from 'zod';
 import {
   getEnumValuesText,
   getEnumsProperties,
@@ -9,11 +10,16 @@ import {
   toPascalCase,
 } from './utils';
 
+import { schema } from './index';
+
+type jsonType = z.infer<typeof schema>['json'];
+
 export async function generate(
   input: string,
   output: string,
   prettierConfigPath?: string,
-  makeSingular: boolean = false
+  makeSingular: boolean = false,
+  jsonType?: jsonType
 ) {
   const exists = fs.existsSync(input);
 
@@ -27,7 +33,7 @@ export async function generate(
   const schemas = getSchemasProperties(input);
   for (const schema of schemas) {
     types.push(`//Schema: ${schema.getName()}`);
-    
+
     const schemaName = schema.getName();
     const tablesProperties = getTablesProperties(input, schemaName);
     const enumsProperties = getEnumsProperties(input, schemaName);
@@ -64,7 +70,7 @@ export async function generate(
     }
 
     if (functionProperties.length > 0) {
-      types.push('//Functions');
+      types.push('// Functions');
     }
     for (const functionProperty of functionProperties) {
       const functionName = functionProperty.getName();
@@ -79,7 +85,42 @@ export async function generate(
   }
 
   const fileContent = fs.readFileSync(input, 'utf-8');
-  let updatedFileContent = fileContent + '\n' + types.join('\n') + '\n';
+
+  let updatedFileContent = '';
+  let jsonTypes = '';
+
+  // Make the custom json types
+  for (const tableName in jsonType) {
+    if (Object.prototype.hasOwnProperty.call(jsonType, tableName)) {
+      const value = jsonType[tableName];
+
+      for (const columnName in value) {
+        // let regex = /level_ranks\??:\s?Json\??(?:\[\])?;/g;
+        const regex = new RegExp(`${columnName}??:s?Json??(?:[])?;/g`);
+        updatedFileContent = fileContent.replace(regex, 'replacementText');
+
+        if (Object.prototype.hasOwnProperty.call(value, columnName)) {
+          const columnValue = value[columnName];
+
+          jsonTypes += `type ${toPascalCase(columnName)} = {`;
+
+          for (const typeName in columnValue) {
+            if (Object.prototype.hasOwnProperty.call(columnValue, typeName)) {
+              const type = columnValue[typeName];
+
+              jsonTypes += `${typeName}: ${type};\n`;
+            }
+          }
+
+          jsonTypes += `}; \n`;
+        }
+      }
+    }
+  }
+
+  updatedFileContent = `${jsonTypes} \n ${updatedFileContent} \n ${types.join(
+    '\n'
+  )} \n`;
   if (prettierConfigPath) {
     updatedFileContent = await prettierFormat(
       updatedFileContent,
