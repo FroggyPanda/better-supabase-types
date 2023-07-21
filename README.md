@@ -2,7 +2,25 @@
 
 # Better Supabase Types
 
-A CLI tool to add exports for your supabase tables. It will add type exports at the bottom of a new typescript file of every table you have. This tool can help remove the need to make a type for their rows manually.
+A CLI tool that helps you streamline your supabase productivity.
+
+### Before 📉
+
+```ts
+import { Database } from './src/schema.ts';
+
+type Todo = Database['public']['Tables']['Todo']['Row'];
+
+const todos: Todo[] = [];
+```
+
+### After 📈
+
+```ts
+import { Todo } from './src/newSchema.ts';
+
+const todos: Todo[] = [];
+```
 
 ## Usage 🔨
 
@@ -50,27 +68,31 @@ export type InsertAccount = Database['public']['Tables']['accounts']['Insert'];
 export type UpdateAccount = Database['public']['Tables']['accounts']['Update'];
 ```
 
-### Before 📉
+### Custom json
 
-```ts
-import { Database } from './src/schema.ts';
+> **Note**
+> Only works in the config based execution (i.e. `.betterrc.json` or `package.json`)
 
-type Todo = Database['public']['Tables']['Todo']['Row'];
+You can switch out supabase's json for your own custom json by declaring it in a config file like so:
 
-const todos: Todo[] = [];
-```
-
-### After 📈
-
-```ts
-import { Todo } from './src/newSchema.ts';
-
-const todos: Todo[] = [];
+```json
+{
+  "input": "schema.ts",
+  "output": "newSchema.ts",
+  "json": {
+    "todos": {
+      "tags": {
+        "tag_name": "string",
+        "hex_color": "string"
+      }
+    }
+  }
+}
 ```
 
 ### Config file ⚙
 
-You can also use a config named `betterrc.json`:
+You can also use a config named `.betterrc.json`:
 
 ```json
 {
