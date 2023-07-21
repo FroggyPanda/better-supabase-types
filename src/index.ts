@@ -5,9 +5,17 @@ import { generate } from './generate';
 import { z } from 'zod';
 import fs from 'fs';
 
+const readPackageJsonFile = (filePath: string) => {
+  try {
+    const prePackageJsonFile = fs.readFileSync(filePath, 'utf-8');
+    return JSON.parse(prePackageJsonFile);
+  } catch (error) {
+    return null;
+  }
+};
+
 const configExists = fs.existsSync('.betterrc.json');
-const prePackageJsonFile = fs.readFileSync('package.json', 'utf-8');
-const packageJsonFile = JSON.parse(prePackageJsonFile);
+const packageJsonFile = readPackageJsonFile('package.json');
 
 export const schema = z
   .object({
@@ -83,7 +91,7 @@ if (configExists) {
       generate(input, output, prettier, singular, jsonType);
     }
   }
-} else if (packageJsonFile['betterConfig']) {
+} else if (packageJsonFile && packageJsonFile['betterConfig']) {
   // Load config from 'package.json' file
 
   // Check if config is correct

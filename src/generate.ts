@@ -8,6 +8,7 @@ import {
   getTablesProperties,
   prettierFormat,
   toPascalCase,
+  changeParameterTypeInInterface,
 } from './utils';
 
 import { schema } from './index';
@@ -86,7 +87,6 @@ export async function generate(
 
   const fileContent = fs.readFileSync(input, 'utf-8');
 
-  let updatedFileContent = '';
   let jsonTypes = '';
 
   // Make the custom json types
@@ -95,13 +95,10 @@ export async function generate(
       const value = jsonType[tableName];
 
       for (const columnName in value) {
-        // let regex = /level_ranks\??:\s?Json\??(?:\[\])?;/g;
-        const regex = new RegExp(`${columnName}??:s?Json??(?:[])?;/g`);
-        updatedFileContent = fileContent.replace(regex, 'replacementText');
-
         if (Object.prototype.hasOwnProperty.call(value, columnName)) {
           const columnValue = value[columnName];
 
+          // Start making the type text for it
           jsonTypes += `type ${toPascalCase(columnName)} = {`;
 
           for (const typeName in columnValue) {
@@ -118,9 +115,9 @@ export async function generate(
     }
   }
 
-  updatedFileContent = `${jsonTypes} \n ${updatedFileContent} \n ${types.join(
-    '\n'
-  )} \n`;
+  let updatedFileContent =
+    jsonTypes + '\n' + fileContent + '\n' + types.join('\n') + '\n';
+
   if (prettierConfigPath) {
     updatedFileContent = await prettierFormat(
       updatedFileContent,
@@ -129,4 +126,20 @@ export async function generate(
   }
 
   fs.writeFileSync(output, updatedFileContent);
+
+  for (const tableName in jsonType) {
+    if (Object.prototype.hasOwnProperty.call(jsonType, tableName)) {
+      const value = jsonType[tableName];
+
+      for (const columnName in value) {
+        changeParameterTypeInInterface(
+          output,
+          'Database',
+          tableName,
+          columnName,
+          toPascalCase(columnName)
+        );
+      }
+    }
+  }
 }
