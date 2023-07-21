@@ -8,6 +8,8 @@ import {
   prettierFormat,
   toPascalCase,
 } from './utils';
+import { ModuleKind, Project, ScriptTarget } from 'ts-morph';
+import chalk from 'chalk';
 
 export async function generate(
   input: string,
@@ -17,24 +19,44 @@ export async function generate(
 ) {
   const exists = fs.existsSync(input);
 
+  const project = new Project({
+    compilerOptions: {
+      allowSyntheticDefaultImports: true,
+      esModuleInterop: true,
+      module: ModuleKind.ESNext,
+      target: ScriptTarget.ESNext,
+      strictNullChecks: true,
+    },
+  });
+
+  const sourceFile = project.addSourceFileAtPath(input);
+
   if (!exists) {
-    console.error('Input file not found');
+    console.error(`${chalk.red.bold('error')} Input file not found`);
     return;
   }
 
   const types: string[] = [];
 
-  const schemas = getSchemasProperties(input);
+  const schemas = getSchemasProperties(project, sourceFile);
   for (const schema of schemas) {
-    types.push(`//Schema: ${schema.getName()}`);
-    
+    types.push(`// Schema: ${schema.getName()}`);
+
     const schemaName = schema.getName();
-    const tablesProperties = getTablesProperties(input, schemaName);
-    const enumsProperties = getEnumsProperties(input, schemaName);
-    const functionProperties = getFunctionReturnTypes(input, schemaName);
+    const tablesProperties = getTablesProperties(
+      project,
+      sourceFile,
+      schemaName
+    );
+    const enumsProperties = getEnumsProperties(project, sourceFile, schemaName);
+    const functionProperties = getFunctionReturnTypes(
+      project,
+      sourceFile,
+      schemaName
+    );
 
     if (enumsProperties.length > 0) {
-      types.push('//Enums');
+      types.push('// Enums');
     }
     for (const enumProperty of enumsProperties) {
       const enumName = enumProperty.getName();
@@ -49,7 +71,7 @@ export async function generate(
     }
 
     if (tablesProperties.length > 0) {
-      types.push('//Tables');
+      types.push('// Tables');
     }
     for (const table of tablesProperties) {
       const tableName = table.getName();
@@ -64,7 +86,7 @@ export async function generate(
     }
 
     if (functionProperties.length > 0) {
-      types.push('//Functions');
+      types.push('// Functions');
     }
     for (const functionProperty of functionProperties) {
       const functionName = functionProperty.getName();

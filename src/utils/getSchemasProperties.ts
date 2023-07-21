@@ -1,18 +1,6 @@
-import { ModuleKind, Project, ScriptTarget } from 'ts-morph';
+import { Project, SourceFile } from 'ts-morph';
 
-export function getSchemasProperties(typesPath: string) {
-  const project = new Project({
-    compilerOptions: {
-      allowSyntheticDefaultImports: true,
-      esModuleInterop: true,
-      module: ModuleKind.ESNext,
-      target: ScriptTarget.ESNext,
-      strictNullChecks: true,
-    },
-  });
-
-  const sourceFile = project.addSourceFileAtPath(typesPath);
-
+export function getSchemasProperties(project: Project, sourceFile: SourceFile) {
   const databaseInterface = sourceFile.getInterfaceOrThrow('Database');
 
   const schemasType = project

@@ -1,18 +1,11 @@
-import { ModuleKind, Project, ScriptTarget } from 'ts-morph';
+import chalk from 'chalk';
+import { Project, SourceFile } from 'ts-morph';
 
-export function getFunctionReturnTypes(typesPath: string, schema: string) {
-  const project = new Project({
-    compilerOptions: {
-      allowSyntheticDefaultImports: true,
-      esModuleInterop: true,
-      module: ModuleKind.ESNext,
-      target: ScriptTarget.ESNext,
-      strictNullChecks: true,
-    },
-  });
-
-  const sourceFile = project.addSourceFileAtPath(typesPath);
-
+export function getFunctionReturnTypes(
+  project: Project,
+  sourceFile: SourceFile,
+  schema: string
+) {
   const databaseInterface = sourceFile.getInterfaceOrThrow('Database');
   const publicProperty = databaseInterface.getPropertyOrThrow(schema);
   const publicType = publicProperty.getType();
@@ -23,7 +16,9 @@ export function getFunctionReturnTypes(typesPath: string, schema: string) {
 
   if (!functionProperty) {
     console.log(
-      `No Functions property found within the Database interface for schema ${schema}.`
+      `${chalk.yellow.bold(
+        'warn'
+      )} No Functions property found within the Database interface for schema ${schema}.`
     );
     return [];
   }
@@ -36,7 +31,9 @@ export function getFunctionReturnTypes(typesPath: string, schema: string) {
 
   if (functionProperties.length < 1) {
     console.log(
-      `No functions found within the Functions property for schema ${schema}.`
+      `${chalk.yellow.bold(
+        'warn'
+      )} No functions found within the Functions property for schema ${schema}.`
     );
     return [];
   }
