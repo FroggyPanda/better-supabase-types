@@ -18,6 +18,7 @@
     "better-supabase-types": "./dist/index.js"
   },
   "dependencies": {
+    "chalk": "^4.1.2",
     "pluralize": "^8.0.0",
     "prettier": "^2.8.8",
     "ts-morph": "^18.0.0",
