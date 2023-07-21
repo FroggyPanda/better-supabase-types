@@ -1,3 +1,5 @@
+type Tags = { tag_name: string; hex_color: string };
+
 export type Json =
   | string
   | number
@@ -16,6 +18,7 @@ export interface Database {
           is_complete: boolean | null;
           task: string | null;
           user_id: string;
+          tags: Tags[];
         };
         Insert: {
           id?: number;
@@ -23,6 +26,7 @@ export interface Database {
           is_complete?: boolean | null;
           task?: string | null;
           user_id: string;
+          tags: Tags[];
         };
         Update: {
           id?: number;
@@ -30,6 +34,7 @@ export interface Database {
           is_complete?: boolean | null;
           task?: string | null;
           user_id?: string;
+          tags: Tags[];
         };
         Relationships: [
           {
@@ -58,6 +63,6 @@ export interface Database {
 
 //Schema: public
 //Tables
-export type Todo = Database['public']['Tables']['todos']['Row'];
-export type InsertTodo = Database['public']['Tables']['todos']['Insert'];
-export type UpdateTodo = Database['public']['Tables']['todos']['Update'];
+export type Todos = Database['public']['Tables']['todos']['Row'];
+export type InsertTodos = Database['public']['Tables']['todos']['Insert'];
+export type UpdateTodos = Database['public']['Tables']['todos']['Update'];

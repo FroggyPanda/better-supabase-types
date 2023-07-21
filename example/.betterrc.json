@@ -1,0 +1,12 @@
+{
+  "input": "beforeSchema.ts",
+  "output": "afterSchema.ts",
+  "json": {
+    "todos": {
+      "tags": {
+        "tag_name": "string",
+        "hex_color": "string"
+      }
+    }
+  }
+}
