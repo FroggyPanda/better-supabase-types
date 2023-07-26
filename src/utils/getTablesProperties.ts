@@ -1,18 +1,11 @@
-import { ModuleKind, Project, ScriptTarget } from 'ts-morph';
+import chalk from 'chalk';
+import { Project, SourceFile } from 'ts-morph';
 
-export function getTablesProperties(typesPath: string, schema: string) {
-  const project = new Project({
-    compilerOptions: {
-      allowSyntheticDefaultImports: true,
-      esModuleInterop: true,
-      module: ModuleKind.ESNext,
-      target: ScriptTarget.ESNext,
-      strictNullChecks: true,
-    },
-  });
-
-  const sourceFile = project.addSourceFileAtPath(typesPath);
-
+export function getTablesProperties(
+  project: Project,
+  sourceFile: SourceFile,
+  schema: string
+) {
   const databaseInterface = sourceFile.getInterfaceOrThrow('Database');
   const publicProperty = databaseInterface.getPropertyOrThrow(schema);
   const publicType = publicProperty.getType();
@@ -23,7 +16,9 @@ export function getTablesProperties(typesPath: string, schema: string) {
 
   if (!tablesProperty) {
     console.log(
-      `No Tables property found within the Database interface for schema ${schema}.`
+      `${chalk.yellow.bold(
+        'warn'
+      )} No Tables property found within the Database interface for schema ${schema}.`
     );
     return [];
   }
@@ -36,7 +31,9 @@ export function getTablesProperties(typesPath: string, schema: string) {
 
   if (tablesProperties.length < 1) {
     console.log(
-      `No tables found within the Tables property for schema ${schema}.`
+      `${chalk.yellow.bold(
+        'warn'
+      )} No tables found within the Tables property for schema ${schema}.`
     );
     return [];
   }

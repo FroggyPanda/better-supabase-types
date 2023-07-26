@@ -4,6 +4,24 @@
 
 A CLI tool to add exports for your supabase tables. It will add type exports at the bottom of a new typescript file of every table you have. This tool can help remove the need to make a type for their rows manually.
 
+### Before 📉
+
+```ts
+import { Database } from './src/schema.ts';
+
+type Todo = Database['public']['Tables']['Todo']['Row'];
+
+const todos: Todo[] = [];
+```
+
+### After 📈
+
+```ts
+import { Todo } from './src/newSchema.ts';
+
+const todos: Todo[] = [];
+```
+
 ## Usage 🔨
 
 1. First have your supabase typescript file generated [Supabase Docs](https://supabase.com/docs/reference/javascript/typescript-support)
@@ -50,27 +68,9 @@ export type InsertAccount = Database['public']['Tables']['accounts']['Insert'];
 export type UpdateAccount = Database['public']['Tables']['accounts']['Update'];
 ```
 
-### Before 📉
-
-```ts
-import { Database } from './src/schema.ts';
-
-type Todo = Database['public']['Tables']['Todo']['Row'];
-
-const todos: Todo[] = [];
-```
-
-### After 📈
-
-```ts
-import { Todo } from './src/newSchema.ts';
-
-const todos: Todo[] = [];
-```
-
 ### Config file ⚙
 
-You can also use a config named `betterrc.json`:
+You can also use a config named `.betterrc.json`:
 
 ```json
 {

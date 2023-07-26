@@ -1,26 +1,12 @@
-import {
-  LiteralTypeNode,
-  ModuleKind,
-  Project,
-  ScriptTarget,
-  ts,
-} from 'ts-morph';
+import { LiteralTypeNode, Project, SourceFile, ts } from 'ts-morph';
+import { toCamelCase } from './toCamelCase';
+import chalk from 'chalk';
 
-import { toCamelCase } from './toCamelCase'
-
-export function getEnumsProperties(typesPath: string, schema: string) {
-  const project = new Project({
-    compilerOptions: {
-      allowSyntheticDefaultImports: true,
-      esModuleInterop: true,
-      module: ModuleKind.ESNext,
-      target: ScriptTarget.ESNext,
-      strictNullChecks: true,
-    },
-  });
-
-  const sourceFile = project.addSourceFileAtPath(typesPath);
-
+export function getEnumsProperties(
+  project: Project,
+  sourceFile: SourceFile,
+  schema: string
+) {
   const databaseInterface = sourceFile.getInterfaceOrThrow('Database');
   const publicProperty = databaseInterface.getPropertyOrThrow(schema);
   const publicType = publicProperty.getType();
@@ -31,7 +17,9 @@ export function getEnumsProperties(typesPath: string, schema: string) {
 
   if (!enumsProperty) {
     console.log(
-      `No Enums property found within the Database interface for schema ${schema}.`
+      `${chalk.yellow.bold(
+        'warn'
+      )} No Enums property found within the Database interface for schema ${schema}.`
     );
     return [];
   }
@@ -44,7 +32,9 @@ export function getEnumsProperties(typesPath: string, schema: string) {
 
   if (enumsProperties.length < 1) {
     console.log(
-      `No enums found within the Enums property for schema ${schema}.`
+      `${chalk.yellow.bold(
+        'warn'
+      )} No enums found within the Enums property for schema ${schema}.`
     );
     return [];
   }
@@ -54,16 +44,16 @@ export function getEnumsProperties(typesPath: string, schema: string) {
 
 function getEnumValueLabel(value: LiteralTypeNode) {
   let enumValue = value.getText().replace(/"/g, '');
-  if(enumValue.includes(' ')) {
+  if (enumValue.includes(' ')) {
     enumValue.replace(/ /g, '_');
   }
-  if(enumValue.includes('-')) {
+  if (enumValue.includes('-')) {
     enumValue.replace(/-/g, '_');
   }
-  if(enumValue.includes('.')) {
+  if (enumValue.includes('.')) {
     enumValue = toCamelCase(enumValue, '.');
   }
-  return enumValue
+  return enumValue;
 }
 
 function getEnumValueText(value: LiteralTypeNode) {
