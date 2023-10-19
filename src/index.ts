@@ -16,6 +16,7 @@ const schema = z
     force: z.boolean().optional(),
     prettier: z.string().optional().default('.prettierrc'),
     singular: z.boolean().optional().default(false),
+    enumAsType: z.boolean().optional().default(false),
   })
   .strict();
 
@@ -38,8 +39,9 @@ if (configExists) {
       const output = result.data.output || result.data.input;
       const prettier = result.data.prettier;
       const singular = result.data.singular ?? false;
+      const enumAsType = result.data.enumAsType ?? false;
 
-      generate(input, output, prettier, singular);
+      generate(input, output, prettier, singular, enumAsType);
     }
   }
 } else if (packageJsonFile['betterConfig']) {
@@ -59,8 +61,9 @@ if (configExists) {
       const output = result.data.output || result.data.input;
       const prettier = result.data.prettier;
       const singular = result.data.singular ?? false;
+      const enumAsType = result.data.enumAsType ?? false;
 
-      generate(input, output, prettier, singular);
+      generate(input, output, prettier, singular, enumAsType);
     }
   }
 } else {
@@ -104,6 +107,12 @@ if (configExists) {
               requiresArg: false,
               default: false,
             },
+            enumAsType: {
+              type: 'boolean',
+              describe: 'Have converted enums defined as types and not enums',
+              requiresArg: false,
+              default: false,
+            },
           })
           .demandOption(['input']);
       },
@@ -119,8 +128,9 @@ if (configExists) {
         const output = argv.output || argv.input;
         const prettier = argv.prettier;
         const singular = argv.singular ?? false;
+        const enumAsType = argv.enumAsType ?? false;
 
-        generate(input, output, prettier, singular);
+        generate(input, output, prettier, singular, enumAsType);
       }
     )
     .help()

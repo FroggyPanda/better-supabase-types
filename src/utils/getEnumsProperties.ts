@@ -61,7 +61,8 @@ function getEnumValueText(value: LiteralTypeNode) {
 }
 
 export function getEnumValuesText(
-  enumProperty: ReturnType<typeof getEnumsProperties>[number]
+  enumProperty: ReturnType<typeof getEnumsProperties>[number],
+  enumAsType: boolean
 ) {
   const enumValues = enumProperty
     .getValueDeclarationOrThrow()
@@ -70,7 +71,13 @@ export function getEnumValuesText(
       enumValue.getChildrenOfKind(ts.SyntaxKind.LiteralType)
     );
 
-  return enumValues.map(
+  if (enumAsType) {
+    return enumValues.map(
+    (value) => `  ${getEnumValueLabel(value)}: ${getEnumValueText(value)},`
+  );
+  } else {
+    return enumValues.map(
     (value) => `  ${getEnumValueLabel(value)} = ${getEnumValueText(value)},`
   );
+  }
 }
