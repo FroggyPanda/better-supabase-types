@@ -16,6 +16,8 @@ const schema = z
     force: z.boolean().optional(),
     prettier: z.string().optional().default('.prettierrc'),
     singular: z.boolean().optional().default(false),
+    enumAsType: z.boolean().optional().default(false),
+    enumPascalCase: z.boolean().optional().default(false)
   })
   .strict();
 
@@ -38,8 +40,10 @@ if (configExists) {
       const output = result.data.output || result.data.input;
       const prettier = result.data.prettier;
       const singular = result.data.singular ?? false;
+      const enumAsType = result.data.enumAsType ?? false;
+      const enumPascalCase = result.data.enumPascalCase ?? false;
 
-      generate(input, output, prettier, singular);
+      generate(input, output, prettier, singular, enumAsType, enumPascalCase);
     }
   }
 } else if (packageJsonFile['betterConfig']) {
@@ -59,8 +63,10 @@ if (configExists) {
       const output = result.data.output || result.data.input;
       const prettier = result.data.prettier;
       const singular = result.data.singular ?? false;
+      const enumAsType = result.data.enumAsType ?? false;
+      const enumPascalCase = result.data.enumPascalCase ?? false;
 
-      generate(input, output, prettier, singular);
+      generate(input, output, prettier, singular, enumAsType, enumPascalCase);
     }
   }
 } else {
@@ -104,6 +110,18 @@ if (configExists) {
               requiresArg: false,
               default: false,
             },
+            enumAsType: {
+              type: 'boolean',
+              describe: 'Have converted enums defined as types and not enums',
+              requiresArg: false,
+              default: false,
+            },
+            enumPascalCase: {
+              type: 'boolean',
+              describe: 'Enums format to pascal case',
+              requiresArg: false,
+              default: false
+            }
           })
           .demandOption(['input']);
       },
@@ -119,8 +137,10 @@ if (configExists) {
         const output = argv.output || argv.input;
         const prettier = argv.prettier;
         const singular = argv.singular ?? false;
+        const enumAsType = argv.enumAsType ?? false;
+        const enumPascalCase = argv.enumPascalCase ?? false
 
-        generate(input, output, prettier, singular);
+        generate(input, output, prettier, singular, enumAsType, enumPascalCase);
       }
     )
     .help()

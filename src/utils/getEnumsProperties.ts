@@ -1,6 +1,7 @@
 import { LiteralTypeNode, Project, SourceFile, ts } from 'ts-morph';
 import { toCamelCase } from './toCamelCase';
 import chalk from 'chalk';
+import { toPascalCase } from './toPascalCase';
 
 export function getEnumsProperties(
   project: Project,
@@ -42,7 +43,7 @@ export function getEnumsProperties(
   return enumsProperties;
 }
 
-function getEnumValueLabel(value: LiteralTypeNode) {
+function getEnumValueLabel(value: LiteralTypeNode, enumPascalCase: boolean) {
   let enumValue = value.getText().replace(/"/g, '');
   if (enumValue.includes(' ')) {
     enumValue.replace(/ /g, '_');
@@ -53,6 +54,13 @@ function getEnumValueLabel(value: LiteralTypeNode) {
   if (enumValue.includes('.')) {
     enumValue = toCamelCase(enumValue, '.');
   }
+  if (enumPascalCase) {
+    enumValue = enumValue.replace(/-/g, '_');
+    enumValue = `"${toPascalCase(
+      enumValue.substring(1, enumValue.length - 1)
+    )}"`;
+  }
+
   return enumValue;
 }
 
@@ -61,7 +69,8 @@ function getEnumValueText(value: LiteralTypeNode) {
 }
 
 export function getEnumValuesText(
-  enumProperty: ReturnType<typeof getEnumsProperties>[number]
+  enumProperty: ReturnType<typeof getEnumsProperties>[number],
+  enumPascalCase: boolean
 ) {
   const enumValues = enumProperty
     .getValueDeclarationOrThrow()
@@ -71,6 +80,9 @@ export function getEnumValuesText(
     );
 
   return enumValues.map(
-    (value) => `  ${getEnumValueLabel(value)} = ${getEnumValueText(value)},`
+    (value) =>
+      `  ${getEnumValueLabel(value, enumPascalCase)} = ${getEnumValueText(
+        value
+      )},`
   );
 }

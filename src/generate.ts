@@ -15,7 +15,9 @@ export async function generate(
   input: string,
   output: string,
   prettierConfigPath?: string,
-  makeSingular: boolean = false
+  makeSingular: boolean = false,
+  enumAsType: boolean = false,
+  enumPascalCase: boolean = false
 ) {
   const exists = fs.existsSync(input);
 
@@ -60,14 +62,22 @@ export async function generate(
     }
     for (const enumProperty of enumsProperties) {
       const enumName = enumProperty.getName();
-      const enumNameType = toPascalCase(enumName, makeSingular);
+      const newEnumName = enumName.replace(/-/g, '_');
+      const enumNameType = toPascalCase(newEnumName, makeSingular);
 
-      types.push(
-        `export enum ${enumNameType} {`,
-        ...(getEnumValuesText(enumProperty) ?? []),
-        '}',
-        '\n'
-      );
+      if (enumAsType) {
+        types.push(
+          `export type ${enumNameType} = Database['${schemaName}']['Enums']['${enumName}'];`,
+          '\n'
+        );
+      } else {
+        types.push(
+          `export enum ${enumNameType} {`,
+          ...(getEnumValuesText(enumProperty, enumPascalCase) ?? []),
+          '}',
+          '\n'
+        );
+      }
     }
 
     if (tablesProperties.length > 0) {
