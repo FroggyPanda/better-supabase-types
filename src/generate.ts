@@ -62,21 +62,18 @@ export async function generate(
     }
     for (const enumProperty of enumsProperties) {
       const enumName = enumProperty.getName();
-      const enumNameType = toPascalCase(enumName, makeSingular);
+      const newEnumName = enumName.replace(/-/g, '_');
+      const enumNameType = toPascalCase(newEnumName, makeSingular);
 
       if (enumAsType) {
         types.push(
-          `export type ${enumNameType} = {`,
-          ...(getEnumValuesText(enumProperty, enumAsType, enumPascalCase) ??
-            []),
-          '}',
+          `export type ${enumNameType} = Database['${schemaName}']['Enums']['${enumName}'];`,
           '\n'
         );
       } else {
         types.push(
           `export enum ${enumNameType} {`,
-          ...(getEnumValuesText(enumProperty, enumAsType, enumPascalCase) ??
-            []),
+          ...(getEnumValuesText(enumProperty, enumPascalCase) ?? []),
           '}',
           '\n'
         );

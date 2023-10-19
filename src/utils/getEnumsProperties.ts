@@ -55,10 +55,12 @@ function getEnumValueLabel(value: LiteralTypeNode, enumPascalCase: boolean) {
     enumValue = toCamelCase(enumValue, '.');
   }
   if (enumPascalCase) {
-    enumValue = enumValue.replace(/-/g,'_');
-    enumValue = `"${toPascalCase(enumValue.substring(1, enumValue.length - 1))}"`;
+    enumValue = enumValue.replace(/-/g, '_');
+    enumValue = `"${toPascalCase(
+      enumValue.substring(1, enumValue.length - 1)
+    )}"`;
   }
-    
+
   return enumValue;
 }
 
@@ -68,7 +70,6 @@ function getEnumValueText(value: LiteralTypeNode) {
 
 export function getEnumValuesText(
   enumProperty: ReturnType<typeof getEnumsProperties>[number],
-  enumAsType: boolean,
   enumPascalCase: boolean
 ) {
   const enumValues = enumProperty
@@ -78,13 +79,10 @@ export function getEnumValuesText(
       enumValue.getChildrenOfKind(ts.SyntaxKind.LiteralType)
     );
 
-  if (enumAsType) {
-    return enumValues.map(
-    (value) => `  ${getEnumValueLabel(value, enumPascalCase)}: ${getEnumValueText(value)},`
+  return enumValues.map(
+    (value) =>
+      `  ${getEnumValueLabel(value, enumPascalCase)} = ${getEnumValueText(
+        value
+      )},`
   );
-  } else {
-    return enumValues.map(
-    (value) => `  ${getEnumValueLabel(value, enumPascalCase)} = ${getEnumValueText(value)},`
-  );
-  }
 }
