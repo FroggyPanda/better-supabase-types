@@ -17,6 +17,7 @@ const schema = z
     prettier: z.string().optional().default('.prettierrc'),
     singular: z.boolean().optional().default(false),
     enumAsType: z.boolean().optional().default(false),
+    enumPascalCase: z.boolean().optional().default(false)
   })
   .strict();
 
@@ -40,8 +41,9 @@ if (configExists) {
       const prettier = result.data.prettier;
       const singular = result.data.singular ?? false;
       const enumAsType = result.data.enumAsType ?? false;
+      const enumPascalCase = result.data.enumPascalCase ?? false;
 
-      generate(input, output, prettier, singular, enumAsType);
+      generate(input, output, prettier, singular, enumAsType, enumPascalCase);
     }
   }
 } else if (packageJsonFile['betterConfig']) {
@@ -62,8 +64,9 @@ if (configExists) {
       const prettier = result.data.prettier;
       const singular = result.data.singular ?? false;
       const enumAsType = result.data.enumAsType ?? false;
+      const enumPascalCase = result.data.enumPascalCase ?? false;
 
-      generate(input, output, prettier, singular, enumAsType);
+      generate(input, output, prettier, singular, enumAsType, enumPascalCase);
     }
   }
 } else {
@@ -113,6 +116,12 @@ if (configExists) {
               requiresArg: false,
               default: false,
             },
+            enumPascalCase: {
+              type: 'boolean',
+              describe: 'Enums format to pascal case',
+              requiresArg: false,
+              default: false
+            }
           })
           .demandOption(['input']);
       },
@@ -129,8 +138,9 @@ if (configExists) {
         const prettier = argv.prettier;
         const singular = argv.singular ?? false;
         const enumAsType = argv.enumAsType ?? false;
+        const enumPascalCase = argv.enumPascalCase ?? false
 
-        generate(input, output, prettier, singular, enumAsType);
+        generate(input, output, prettier, singular, enumAsType, enumPascalCase);
       }
     )
     .help()

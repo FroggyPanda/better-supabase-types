@@ -16,7 +16,8 @@ export async function generate(
   output: string,
   prettierConfigPath?: string,
   makeSingular: boolean = false,
-  enumAsType: boolean = false
+  enumAsType: boolean = false,
+  enumPascalCase: boolean = false
 ) {
   const exists = fs.existsSync(input);
 
@@ -66,14 +67,16 @@ export async function generate(
       if (enumAsType) {
         types.push(
           `export type ${enumNameType} = {`,
-          ...(getEnumValuesText(enumProperty, enumAsType) ?? []),
+          ...(getEnumValuesText(enumProperty, enumAsType, enumPascalCase) ??
+            []),
           '}',
           '\n'
         );
       } else {
         types.push(
           `export enum ${enumNameType} {`,
-          ...(getEnumValuesText(enumProperty, enumAsType) ?? []),
+          ...(getEnumValuesText(enumProperty, enumAsType, enumPascalCase) ??
+            []),
           '}',
           '\n'
         );
