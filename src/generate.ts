@@ -5,6 +5,7 @@ import {
   getFunctionReturnTypes,
   getSchemasProperties,
   getTablesProperties,
+  getViewsProperties,
   prettierFormat,
   toPascalCase,
 } from './utils';
@@ -50,6 +51,11 @@ export async function generate(
       sourceFile,
       schemaName
     );
+    const viewsProperties = getViewsProperties(
+      project,
+      sourceFile,
+      schemaName
+    );
     const enumsProperties = getEnumsProperties(project, sourceFile, schemaName);
     const functionProperties = getFunctionReturnTypes(
       project,
@@ -91,6 +97,19 @@ export async function generate(
         `export type ${tableNameType} = Database['${schemaName}']['Tables']['${tableName}']['Row'];`,
         `export type Insert${tableNameType} = Database['${schemaName}']['Tables']['${tableName}']['Insert'];`,
         `export type Update${tableNameType} = Database['${schemaName}']['Tables']['${tableName}']['Update'];`,
+        '\n'
+      );
+    }
+
+    if (viewsProperties.length > 0) {
+      types.push('// Views');
+    }
+    for (const view of viewsProperties) {
+      const viewName = view.getName();
+      const viewNameType = toPascalCase(viewName, makeSingular);
+
+      types.push(
+        `export type ${viewNameType} = Database['${schemaName}']['Views']['${viewName}']['Row'];`,
         '\n'
       );
     }
