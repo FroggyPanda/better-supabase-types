@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { Project, SourceFile } from 'ts-morph';
 
 export function getViewsProperties(
@@ -15,7 +16,9 @@ export function getViewsProperties(
 
   if (!viewsProperty) {
     console.log(
-      `No Views property found within the Database interface for schema ${schema}.`
+      `${chalk.yellow.bold(
+        'warn'
+      )} No Views property found within the Database interface for schema ${schema}.`
     );
     return [];
   }
