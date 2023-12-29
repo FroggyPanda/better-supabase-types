@@ -56,9 +56,7 @@ function getEnumValueLabel(value: LiteralTypeNode, enumPascalCase: boolean) {
   }
   if (enumPascalCase) {
     enumValue = enumValue.replace(/-/g, '_');
-    enumValue = `"${toPascalCase(
-      enumValue.substring(1, enumValue.length - 1)
-    )}"`;
+    enumValue = `"${toPascalCase(enumValue.substring(0, enumValue.length))}"`;
   }
 
   return enumValue;
