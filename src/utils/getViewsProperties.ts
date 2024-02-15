@@ -1,13 +1,12 @@
 import chalk from 'chalk';
 import { Project, SourceFile } from 'ts-morph';
-import { getDatabaseType } from './getDatabaseType';
 
 export function getViewsProperties(
   project: Project,
   sourceFile: SourceFile,
   schema: string
 ) {
-  const databaseInterface = getDatabaseType(sourceFile);
+  const databaseInterface = sourceFile.getInterfaceOrThrow('Database');
   const publicProperty = databaseInterface.getPropertyOrThrow(schema);
   const publicType = publicProperty.getType();
 
