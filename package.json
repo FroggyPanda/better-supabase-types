@@ -4,19 +4,15 @@
   "repository": "FroggyPanda/better-supabase-types",
   "bugs": "https://github.com/FroggyPanda/better-supabase-types/issues",
   "author": "FroggyPanda",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "main": "src/index.js",
+  "bin": "src/index.js",
   "private": false,
   "version": "2.7.1",
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "tsup ./src/index.ts --format cjs,esm --dts",
-    "lint": "eslint ./src"
-  },
-  "bin": {
-    "better-supabase-types": "./dist/index.js"
+    "lint": "prettier \"src/**/**.js\" --check && eslint \"src/**/**.js\"",
+    "format": "prettier \"src/**/**.js\" --write"
   },
   "dependencies": {
     "chalk": "^4.1.2",
@@ -30,11 +26,7 @@
     "@types/node": "^18.15.13",
     "@types/pluralize": "^0.0.29",
     "@types/yargs": "^17.0.24",
-    "eslint": "^8.56.0",
-    "nodemon": "^2.0.22",
-    "ts-node": "^10.9.1",
-    "tsup": "^6.7.0",
-    "typescript": "^5.0.4"
+    "eslint": "^8.56.0"
   },
   "keywords": [
     "supabase",
