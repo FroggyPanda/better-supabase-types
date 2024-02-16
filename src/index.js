@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { generate } from './generate';
+import { generate } from './generate.js';
 import { z } from 'zod';
 import fs from 'fs';
 
@@ -17,7 +17,7 @@ const schema = z
     prettier: z.string().optional().default('.prettierrc'),
     singular: z.boolean().optional().default(false),
     enumAsType: z.boolean().optional().default(false),
-    enumPascalCase: z.boolean().optional().default(false)
+    enumPascalCase: z.boolean().optional().default(false),
   })
   .strict();
 
@@ -120,8 +120,8 @@ if (configExists) {
               type: 'boolean',
               describe: 'Enums format to pascal case',
               requiresArg: false,
-              default: false
-            }
+              default: false,
+            },
           })
           .demandOption(['input']);
       },
@@ -138,7 +138,7 @@ if (configExists) {
         const prettier = argv.prettier;
         const singular = argv.singular ?? false;
         const enumAsType = argv.enumAsType ?? false;
-        const enumPascalCase = argv.enumPascalCase ?? false
+        const enumPascalCase = argv.enumPascalCase ?? false;
 
         generate(input, output, prettier, singular, enumAsType, enumPascalCase);
       }

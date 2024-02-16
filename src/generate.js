@@ -8,7 +8,7 @@ import {
   getViewsProperties,
   prettierFormat,
   toPascalCase,
-} from './utils';
+} from './utils/index.js';
 import { ModuleKind, Project, ScriptTarget } from 'ts-morph';
 import chalk from 'chalk';
 

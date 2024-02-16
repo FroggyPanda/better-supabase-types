@@ -1,7 +1,7 @@
 import { ts } from 'ts-morph';
-import { toCamelCase } from './toCamelCase';
 import chalk from 'chalk';
-import { toPascalCase } from './toPascalCase';
+import { toCamelCase } from './toCamelCase.js';
+import { toPascalCase } from './toPascalCase.js';
 
 /**
  * @param {import('ts-morph').Project} project

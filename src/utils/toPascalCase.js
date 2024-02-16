@@ -1,4 +1,5 @@
-import { singular } from 'pluralize';
+import pkg from 'pluralize';
+const { singular } = pkg;
 
 /**
  * @param {boolean} makeSingular
