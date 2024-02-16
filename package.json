@@ -10,6 +10,7 @@
   "private": false,
   "version": "2.7.1",
   "license": "MIT",
+  "type": "module",
   "scripts": {
     "build": "tsup ./src/index.ts --format cjs,esm --dts",
     "lint": "tsc"
