@@ -1,11 +1,12 @@
 import chalk from 'chalk';
-import { Project, SourceFile } from 'ts-morph';
 
-export function getFunctionReturnTypes(
-  project: Project,
-  sourceFile: SourceFile,
-  schema: string
-) {
+/**
+ * @param {import('ts-morph').Project} project
+ * @param {import('ts-morph').SourceFile} sourceFile
+ * @param {string} schema
+ * @returns
+ */
+export function getFunctionReturnTypes(project, sourceFile, schema) {
   const databaseInterface = sourceFile.getInterfaceOrThrow('Database');
   const publicProperty = databaseInterface.getPropertyOrThrow(schema);
   const publicType = publicProperty.getType();
