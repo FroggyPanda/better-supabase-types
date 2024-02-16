@@ -13,7 +13,7 @@
   "type": "module",
   "scripts": {
     "build": "tsup ./src/index.ts --format cjs,esm --dts",
-    "lint": "tsc"
+    "lint": "eslint ./src"
   },
   "bin": {
     "better-supabase-types": "./dist/index.js"
@@ -30,6 +30,7 @@
     "@types/node": "^18.15.13",
     "@types/pluralize": "^0.0.29",
     "@types/yargs": "^17.0.24",
+    "eslint": "^8.56.0",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.1",
     "tsup": "^6.7.0",
