@@ -1,6 +1,11 @@
 import { format, resolveConfig } from 'prettier';
 
-export async function prettierFormat(fileContent: string, configPath: string): Promise<string> {
+/**
+ * @param {string} fileContent
+ * @param {string} configPath
+ * @returns {Promise<string>}
+ */
+export async function prettierFormat(fileContent, configPath) {
   const prettierConfig = await resolveConfig(configPath);
 
   const formattedFileContent = format(fileContent, {
