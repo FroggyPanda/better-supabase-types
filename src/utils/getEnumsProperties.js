@@ -1,13 +1,15 @@
-import { LiteralTypeNode, Project, SourceFile, ts } from 'ts-morph';
+import { ts } from 'ts-morph';
 import { toCamelCase } from './toCamelCase';
 import chalk from 'chalk';
 import { toPascalCase } from './toPascalCase';
 
-export function getEnumsProperties(
-  project: Project,
-  sourceFile: SourceFile,
-  schema: string
-) {
+/**
+ * @param {import('ts-morph').Project} project
+ * @param {import('ts-morph').SourceFile} sourceFile
+ * @param {string} schema
+ * @returns
+ */
+export function getEnumsProperties(project, sourceFile, schema) {
   const databaseInterface = sourceFile.getInterfaceOrThrow('Database');
   const publicProperty = databaseInterface.getPropertyOrThrow(schema);
   const publicType = publicProperty.getType();
@@ -43,7 +45,12 @@ export function getEnumsProperties(
   return enumsProperties;
 }
 
-function getEnumValueLabel(value: LiteralTypeNode, enumPascalCase: boolean) {
+/**
+ * @param {import('ts-morph').LiteralTypeNode} value
+ * @param {boolean} enumPascalCase
+ * @returns
+ */
+function getEnumValueLabel(value, enumPascalCase) {
   let enumValue = value.getText().replace(/"/g, '');
   if (enumValue.includes(' ')) {
     enumValue.replace(/ /g, '_');
@@ -62,14 +69,20 @@ function getEnumValueLabel(value: LiteralTypeNode, enumPascalCase: boolean) {
   return enumValue;
 }
 
-function getEnumValueText(value: LiteralTypeNode) {
+/**
+ * @param {import('ts-morph').LiteralTypeNode} value
+ * @returns
+ */
+function getEnumValueText(value) {
   return value.getText();
 }
 
-export function getEnumValuesText(
-  enumProperty: ReturnType<typeof getEnumsProperties>[number],
-  enumPascalCase: boolean
-) {
+/**
+ * @param {ReturnType<typeof getEnumsProperties>[number]} enumProperty
+ * @param {boolean} enumPascalCase
+ * @returns
+ */
+export function getEnumValuesText(enumProperty, enumPascalCase) {
   const enumValues = enumProperty
     .getValueDeclarationOrThrow()
     .getChildrenOfKind(ts.SyntaxKind.UnionType)
