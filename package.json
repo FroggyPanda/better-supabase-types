@@ -11,8 +11,9 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "lint": "prettier \"src/**/**.js\" --check && eslint \"src/**/**.js\"",
-    "format": "prettier \"src/**/**.js\" --write"
+    "lint": "prettier \"src/**/**.js\" --check && eslint \"src/**/**.js\" && tsc",
+    "format": "prettier \"src/**/**.js\" --write",
+    "pp": "tsc"
   },
   "dependencies": {
     "chalk": "^4.1.2",
@@ -26,7 +27,8 @@
     "@types/node": "^18.15.13",
     "@types/pluralize": "^0.0.29",
     "@types/yargs": "^17.0.24",
-    "eslint": "^8.56.0"
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3"
   },
   "keywords": [
     "supabase",
