@@ -1,4 +1,4 @@
-name: CI
+name: main
 on:
   push:
     branches:
@@ -17,7 +17,7 @@ jobs:
           node-version: 16.x
           cache: 'pnpm'
 
-      - run: pnpm install
+      - run: pnpm install --frozen-lockfile
       - run: pnpm run format
   lint:
     runs-on: ubuntu-latest
@@ -31,5 +31,5 @@ jobs:
           node-version: 16.x
           cache: 'pnpm'
 
-      - run: pnpm install
+      - run: pnpm install --frozen-lockfile
       - run: pnpm run lint
