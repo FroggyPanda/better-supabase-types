@@ -2,14 +2,15 @@ import { LiteralTypeNode, Project, SourceFile, ts } from 'ts-morph';
 import { toCamelCase } from './toCamelCase';
 import chalk from 'chalk';
 import { toPascalCase } from './toPascalCase';
+import { getDatabaseType } from './getDatabaseType';
 
 export function getEnumsProperties(
   project: Project,
   sourceFile: SourceFile,
   schema: string
 ) {
-  const databaseInterface = sourceFile.getInterfaceOrThrow('Database');
-  const publicProperty = databaseInterface.getPropertyOrThrow(schema);
+  const databaseType = getDatabaseType(sourceFile);
+  const publicProperty = databaseType.getPropertyOrThrow(schema);
   const publicType = publicProperty.getType();
 
   const enumsProperty = publicType
