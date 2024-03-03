@@ -5,7 +5,7 @@ on:
       - '**'
 
 jobs:
-  build:
+  format:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -19,4 +19,17 @@ jobs:
 
       - run: pnpm install
       - run: pnpm run format
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: 'pnpm'
+
+      - run: pnpm install
       - run: pnpm run lint
