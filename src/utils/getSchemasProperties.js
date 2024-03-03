@@ -1,15 +1,17 @@
+import { getDatabaseType } from './getDatabaseType.js';
+
 /**
  * @param {import('ts-morph').Project} project
  * @param {import('ts-morph').SourceFile} sourceFile
  * @returns
  */
 export function getSchemasProperties(project, sourceFile) {
-  const databaseInterface = sourceFile.getInterfaceOrThrow('Database');
+  const databaseType = getDatabaseType(sourceFile);
 
   const schemasType = project
     .getProgram()
     .getTypeChecker()
-    .getTypeAtLocation(databaseInterface);
+    .getTypeAtLocation(databaseType);
   const schemasProperties = schemasType.getProperties();
 
   if (schemasProperties.length < 1)
