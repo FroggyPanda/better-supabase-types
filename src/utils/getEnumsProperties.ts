@@ -71,12 +71,23 @@ export function getEnumValuesText(
   enumProperty: ReturnType<typeof getEnumsProperties>[number],
   enumPascalCase: boolean
 ) {
-  const enumValues = enumProperty
+  // Attempt to find a union type first
+  let enumValues = enumProperty
     .getValueDeclarationOrThrow()
     .getChildrenOfKind(ts.SyntaxKind.UnionType)
-    .flatMap((enumValue) =>
-      enumValue.getChildrenOfKind(ts.SyntaxKind.LiteralType)
+    .flatMap(enumValue =>
+      enumValue.getChildrenOfKind(ts.SyntaxKind.LiteralType),
     );
+
+  // If no union type was found, try to get a literal type directly
+  if (enumValues.length === 0) {
+    const directLiteral = enumProperty
+      .getValueDeclarationOrThrow()
+      .getChildrenOfKind(ts.SyntaxKind.LiteralType);
+    if (directLiteral.length > 0) {
+      enumValues = directLiteral;
+    }
+  }
 
   return enumValues.map(
     (value) =>
