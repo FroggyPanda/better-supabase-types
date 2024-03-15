@@ -12,8 +12,7 @@
   "type": "module",
   "scripts": {
     "lint": "prettier \"src/**/**.js\" --check && eslint \"src/**/**.js\" && tsc",
-    "format": "prettier \"src/**/**.js\" --write",
-    "pp": "tsc"
+    "format": "prettier \"src/**/**.js\" --write"
   },
   "dependencies": {
     "chalk": "^4.1.2",
