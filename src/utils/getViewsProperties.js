@@ -35,7 +35,9 @@ export function getViewsProperties(project, sourceFile, schema) {
   if (viewsProperties.length < 1) {
     // eslint-disable-next-line no-console
     console.log(
-      `No views found within the Views property for schema ${schema}.`
+      `${chalk.yellow.bold(
+        'warn'
+      )} No views found within the Views property for schema ${schema}.`
     );
     return [];
   }
