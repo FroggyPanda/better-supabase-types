@@ -17,6 +17,7 @@ export function getTablesProperties(project, sourceFile, schema) {
     .find((property) => property.getName() === 'Tables');
 
   if (!tablesProperty) {
+    // eslint-disable-next-line no-console
     console.log(
       `${chalk.yellow.bold(
         'warn'
@@ -32,6 +33,7 @@ export function getTablesProperties(project, sourceFile, schema) {
   const tablesProperties = tablesType.getProperties();
 
   if (tablesProperties.length < 1) {
+    // eslint-disable-next-line no-console
     console.log(
       `${chalk.yellow.bold(
         'warn'

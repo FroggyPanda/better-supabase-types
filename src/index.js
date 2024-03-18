@@ -29,9 +29,11 @@ if (configExists) {
   // Check if config is correct
   const result = schema.safeParse(json);
   if (!result.success) {
+    // eslint-disable-next-line no-console
     console.log('Invalid config file');
   } else {
     if (!result.data.output && !result.data.force) {
+      // eslint-disable-next-line no-console
       console.log(
         'It looks like you want to overwrite your input file. Add the force property to do that in your config file.'
       );
@@ -52,9 +54,11 @@ if (configExists) {
   // Check if config is correct
   const result = schema.safeParse(packageJsonFile['betterConfig']);
   if (!result.success) {
+    // eslint-disable-next-line no-console
     console.log('Invalid config in package.json');
   } else {
     if (!result.data.output && !result.data.force) {
+      // eslint-disable-next-line no-console
       console.log(
         'It looks like you want to overwrite your input file. Add the force property to do that in your config file.'
       );
@@ -127,6 +131,7 @@ if (configExists) {
       },
       (argv) => {
         if (!argv.output && !argv.force) {
+          // eslint-disable-next-line no-console
           console.error(
             'It looks like you want to overwrite your input file. Add the force flag to do that.'
           );

@@ -17,6 +17,7 @@ export function getViewsProperties(project, sourceFile, schema) {
     .find((property) => property.getName() === 'Views');
 
   if (!viewsProperty) {
+    // eslint-disable-next-line no-console
     console.log(
       `${chalk.yellow.bold(
         'warn'
@@ -32,6 +33,7 @@ export function getViewsProperties(project, sourceFile, schema) {
   const viewsProperties = viewsType.getProperties();
 
   if (viewsProperties.length < 1) {
+    // eslint-disable-next-line no-console
     console.log(
       `No views found within the Views property for schema ${schema}.`
     );

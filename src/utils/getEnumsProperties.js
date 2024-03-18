@@ -20,6 +20,7 @@ export function getEnumsProperties(project, sourceFile, schema) {
     .find((property) => property.getName() === 'Enums');
 
   if (!enumsProperty) {
+    // eslint-disable-next-line no-console
     console.log(
       `${chalk.yellow.bold(
         'warn'
@@ -35,6 +36,7 @@ export function getEnumsProperties(project, sourceFile, schema) {
   const enumsProperties = enumsType.getProperties();
 
   if (enumsProperties.length < 1) {
+    // eslint-disable-next-line no-console
     console.log(
       `${chalk.yellow.bold(
         'warn'

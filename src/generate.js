@@ -44,6 +44,7 @@ export async function generate(
   const sourceFile = project.addSourceFileAtPath(input);
 
   if (!exists) {
+    // eslint-disable-next-line no-console
     console.error(`${chalk.red.bold('error')} Input file not found`);
     return;
   }

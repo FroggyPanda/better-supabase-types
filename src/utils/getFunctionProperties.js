@@ -17,6 +17,7 @@ export function getFunctionReturnTypes(project, sourceFile, schema) {
     .find((property) => property.getName() === 'Functions');
 
   if (!functionProperty) {
+    // eslint-disable-next-line no-console
     console.log(
       `${chalk.yellow.bold(
         'warn'
@@ -32,6 +33,7 @@ export function getFunctionReturnTypes(project, sourceFile, schema) {
   const functionProperties = functionType.getProperties();
 
   if (functionProperties.length < 1) {
+    // eslint-disable-next-line no-console
     console.log(
       `${chalk.yellow.bold(
         'warn'
