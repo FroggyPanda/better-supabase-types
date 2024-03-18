@@ -1,7 +1,11 @@
-import { Project, SourceFile } from 'ts-morph';
-import { getDatabaseType } from './getDatabaseType';
+import { getDatabaseType } from './getDatabaseType.js';
 
-export function getSchemasProperties(project: Project, sourceFile: SourceFile) {
+/**
+ * @param {import('ts-morph').Project} project
+ * @param {import('ts-morph').SourceFile} sourceFile
+ * @returns
+ */
+export function getSchemasProperties(project, sourceFile) {
   const databaseType = getDatabaseType(sourceFile);
 
   const schemasType = project

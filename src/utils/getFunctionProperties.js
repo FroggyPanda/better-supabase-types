@@ -1,12 +1,13 @@
 import chalk from 'chalk';
-import { Project, SourceFile } from 'ts-morph';
-import { getDatabaseType } from './getDatabaseType';
+import { getDatabaseType } from './getDatabaseType.js';
 
-export function getFunctionReturnTypes(
-  project: Project,
-  sourceFile: SourceFile,
-  schema: string
-) {
+/**
+ * @param {import('ts-morph').Project} project
+ * @param {import('ts-morph').SourceFile} sourceFile
+ * @param {string} schema
+ * @returns
+ */
+export function getFunctionReturnTypes(project, sourceFile, schema) {
   const databaseType = getDatabaseType(sourceFile);
   const publicProperty = databaseType.getPropertyOrThrow(schema);
   const publicType = publicProperty.getType();
@@ -16,6 +17,7 @@ export function getFunctionReturnTypes(
     .find((property) => property.getName() === 'Functions');
 
   if (!functionProperty) {
+    // eslint-disable-next-line no-console
     console.log(
       `${chalk.yellow.bold(
         'warn'
@@ -31,6 +33,7 @@ export function getFunctionReturnTypes(
   const functionProperties = functionType.getProperties();
 
   if (functionProperties.length < 1) {
+    // eslint-disable-next-line no-console
     console.log(
       `${chalk.yellow.bold(
         'warn'

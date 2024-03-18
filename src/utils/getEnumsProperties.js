@@ -1,14 +1,16 @@
-import { LiteralTypeNode, Project, SourceFile, ts } from 'ts-morph';
-import { toCamelCase } from './toCamelCase';
+import { ts } from 'ts-morph';
 import chalk from 'chalk';
-import { toPascalCase } from './toPascalCase';
-import { getDatabaseType } from './getDatabaseType';
+import { toCamelCase } from './toCamelCase.js';
+import { toPascalCase } from './toPascalCase.js';
+import { getDatabaseType } from './getDatabaseType.js';
 
-export function getEnumsProperties(
-  project: Project,
-  sourceFile: SourceFile,
-  schema: string
-) {
+/**
+ * @param {import('ts-morph').Project} project
+ * @param {import('ts-morph').SourceFile} sourceFile
+ * @param {string} schema
+ * @returns
+ */
+export function getEnumsProperties(project, sourceFile, schema) {
   const databaseType = getDatabaseType(sourceFile);
   const publicProperty = databaseType.getPropertyOrThrow(schema);
   const publicType = publicProperty.getType();
@@ -18,6 +20,7 @@ export function getEnumsProperties(
     .find((property) => property.getName() === 'Enums');
 
   if (!enumsProperty) {
+    // eslint-disable-next-line no-console
     console.log(
       `${chalk.yellow.bold(
         'warn'
@@ -33,6 +36,7 @@ export function getEnumsProperties(
   const enumsProperties = enumsType.getProperties();
 
   if (enumsProperties.length < 1) {
+    // eslint-disable-next-line no-console
     console.log(
       `${chalk.yellow.bold(
         'warn'
@@ -44,7 +48,12 @@ export function getEnumsProperties(
   return enumsProperties;
 }
 
-function getEnumValueLabel(value: LiteralTypeNode, enumPascalCase: boolean) {
+/**
+ * @param {import('ts-morph').LiteralTypeNode} value
+ * @param {boolean} enumPascalCase
+ * @returns
+ */
+function getEnumValueLabel(value, enumPascalCase) {
   let enumValue = value.getText().replace(/"/g, '');
   if (enumValue.includes(' ')) {
     enumValue.replace(/ /g, '_');
@@ -63,20 +72,26 @@ function getEnumValueLabel(value: LiteralTypeNode, enumPascalCase: boolean) {
   return enumValue;
 }
 
-function getEnumValueText(value: LiteralTypeNode) {
+/**
+ * @param {import('ts-morph').LiteralTypeNode} value
+ * @returns
+ */
+function getEnumValueText(value) {
   return value.getText();
 }
 
-export function getEnumValuesText(
-  enumProperty: ReturnType<typeof getEnumsProperties>[number],
-  enumPascalCase: boolean
-) {
+/**
+ * @param {ReturnType<typeof getEnumsProperties>[number]} enumProperty
+ * @param {boolean} enumPascalCase
+ * @returns
+ */
+export function getEnumValuesText(enumProperty, enumPascalCase) {
   // Attempt to find a union type first
   let enumValues = enumProperty
     .getValueDeclarationOrThrow()
     .getChildrenOfKind(ts.SyntaxKind.UnionType)
-    .flatMap(enumValue =>
-      enumValue.getChildrenOfKind(ts.SyntaxKind.LiteralType),
+    .flatMap((enumValue) =>
+      enumValue.getChildrenOfKind(ts.SyntaxKind.LiteralType)
     );
 
   // If no union type was found, try to get a literal type directly

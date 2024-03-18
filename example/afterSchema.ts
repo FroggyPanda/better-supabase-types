@@ -6,7 +6,7 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[];
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       todos: {
@@ -37,7 +37,7 @@ export interface Database {
             columns: ['user_id'];
             referencedRelation: 'users';
             referencedColumns: ['id'];
-          }
+          },
         ];
       };
     };
@@ -54,10 +54,10 @@ export interface Database {
       [_ in never]: never;
     };
   };
-}
+};
 
-//Schema: public
-//Tables
-export type Todo = Database['public']['Tables']['todos']['Row'];
-export type InsertTodo = Database['public']['Tables']['todos']['Insert'];
-export type UpdateTodo = Database['public']['Tables']['todos']['Update'];
+// Schema: public
+// Tables
+export type Todos = Database['public']['Tables']['todos']['Row'];
+export type InsertTodos = Database['public']['Tables']['todos']['Insert'];
+export type UpdateTodos = Database['public']['Tables']['todos']['Update'];

@@ -1,6 +1,10 @@
-import { SourceFile, Node } from 'ts-morph';
+import { Node } from 'ts-morph';
 
-export function getDatabaseType(sourceFile: SourceFile) {
+/**
+ * @param {import('ts-morph').SourceFile} sourceFile
+ * @returns
+ */
+export function getDatabaseType(sourceFile) {
   const databaseInterface = sourceFile.getInterface('Database');
   if (databaseInterface) {
     return databaseInterface;

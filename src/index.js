@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { generate } from './generate';
+import { generate } from './generate.js';
 import { z } from 'zod';
 import fs from 'fs';
 
@@ -17,7 +17,7 @@ const schema = z
     prettier: z.string().optional().default('.prettierrc'),
     singular: z.boolean().optional().default(false),
     enumAsType: z.boolean().optional().default(false),
-    enumPascalCase: z.boolean().optional().default(false)
+    enumPascalCase: z.boolean().optional().default(false),
   })
   .strict();
 
@@ -29,9 +29,11 @@ if (configExists) {
   // Check if config is correct
   const result = schema.safeParse(json);
   if (!result.success) {
+    // eslint-disable-next-line no-console
     console.log('Invalid config file');
   } else {
     if (!result.data.output && !result.data.force) {
+      // eslint-disable-next-line no-console
       console.log(
         'It looks like you want to overwrite your input file. Add the force property to do that in your config file.'
       );
@@ -52,9 +54,11 @@ if (configExists) {
   // Check if config is correct
   const result = schema.safeParse(packageJsonFile['betterConfig']);
   if (!result.success) {
+    // eslint-disable-next-line no-console
     console.log('Invalid config in package.json');
   } else {
     if (!result.data.output && !result.data.force) {
+      // eslint-disable-next-line no-console
       console.log(
         'It looks like you want to overwrite your input file. Add the force property to do that in your config file.'
       );
@@ -120,13 +124,14 @@ if (configExists) {
               type: 'boolean',
               describe: 'Enums format to pascal case',
               requiresArg: false,
-              default: false
-            }
+              default: false,
+            },
           })
           .demandOption(['input']);
       },
       (argv) => {
         if (!argv.output && !argv.force) {
+          // eslint-disable-next-line no-console
           console.error(
             'It looks like you want to overwrite your input file. Add the force flag to do that.'
           );
@@ -138,7 +143,7 @@ if (configExists) {
         const prettier = argv.prettier;
         const singular = argv.singular ?? false;
         const enumAsType = argv.enumAsType ?? false;
-        const enumPascalCase = argv.enumPascalCase ?? false
+        const enumPascalCase = argv.enumPascalCase ?? false;
 
         generate(input, output, prettier, singular, enumAsType, enumPascalCase);
       }

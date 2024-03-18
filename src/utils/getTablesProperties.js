@@ -1,14 +1,15 @@
 import chalk from 'chalk';
-import { Project, SourceFile } from 'ts-morph';
-import { getDatabaseType } from './getDatabaseType';
+import { getDatabaseType } from './getDatabaseType.js';
 
-export function getTablesProperties(
-  project: Project,
-  sourceFile: SourceFile,
-  schema: string
-) {
-  const databaseInterface = getDatabaseType(sourceFile);
-  const publicProperty = databaseInterface.getPropertyOrThrow(schema);
+/**
+ * @param {import('ts-morph').Project} project
+ * @param {import('ts-morph').SourceFile} sourceFile
+ * @param {string} schema
+ * @returns
+ */
+export function getTablesProperties(project, sourceFile, schema) {
+  const databaseType = getDatabaseType(sourceFile);
+  const publicProperty = databaseType.getPropertyOrThrow(schema);
   const publicType = publicProperty.getType();
 
   const tablesProperty = publicType
@@ -16,6 +17,7 @@ export function getTablesProperties(
     .find((property) => property.getName() === 'Tables');
 
   if (!tablesProperty) {
+    // eslint-disable-next-line no-console
     console.log(
       `${chalk.yellow.bold(
         'warn'
@@ -31,6 +33,7 @@ export function getTablesProperties(
   const tablesProperties = tablesType.getProperties();
 
   if (tablesProperties.length < 1) {
+    // eslint-disable-next-line no-console
     console.log(
       `${chalk.yellow.bold(
         'warn'

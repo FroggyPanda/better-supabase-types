@@ -8,17 +8,26 @@ import {
   getViewsProperties,
   prettierFormat,
   toPascalCase,
-} from './utils';
+} from './utils/index.js';
 import { ModuleKind, Project, ScriptTarget } from 'ts-morph';
 import chalk from 'chalk';
 
+/**
+ * @param {string} input
+ * @param {string} output
+ * @param {string} [prettierConfigPath]
+ * @param {boolean} makeSingular
+ * @param {boolean} enumAsType
+ * @param {boolean} enumPascalCase
+ * @returns
+ */
 export async function generate(
-  input: string,
-  output: string,
-  prettierConfigPath?: string,
-  makeSingular: boolean = false,
-  enumAsType: boolean = false,
-  enumPascalCase: boolean = false
+  input,
+  output,
+  prettierConfigPath,
+  makeSingular = false,
+  enumAsType = false,
+  enumPascalCase = false
 ) {
   const exists = fs.existsSync(input);
 
@@ -35,11 +44,13 @@ export async function generate(
   const sourceFile = project.addSourceFileAtPath(input);
 
   if (!exists) {
+    // eslint-disable-next-line no-console
     console.error(`${chalk.red.bold('error')} Input file not found`);
     return;
   }
 
-  const types: string[] = [];
+  /** @type {string[]} */
+  const types = [];
 
   const schemas = getSchemasProperties(project, sourceFile);
   for (const schema of schemas) {
@@ -51,11 +62,7 @@ export async function generate(
       sourceFile,
       schemaName
     );
-    const viewsProperties = getViewsProperties(
-      project,
-      sourceFile,
-      schemaName
-    );
+    const viewsProperties = getViewsProperties(project, sourceFile, schemaName);
     const enumsProperties = getEnumsProperties(project, sourceFile, schemaName);
     const functionProperties = getFunctionReturnTypes(
       project,
