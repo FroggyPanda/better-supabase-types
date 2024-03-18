@@ -36,36 +36,22 @@ npx supabase gen types typescript --linked --schema public > ./src/schema.ts
 npx better-supabase-types -i ./src/schema.ts -o ./src/newSchema.ts
 ```
 
-### Overwrite input file ↩️
+## Commands 💻
 
-If you would like to overwrite the input file with the better types output, you must supply the `force` flag (`-f`) to the generate command:
-
-```bash
-npx better-supabase-types -i ./src/schema.ts -f
 ```
-
-### Using Prettier Config 🎨
-
-If your project uses `prettier` this tool will automattically read it from your `.prettierrc` file! In the case that your `prettier` config file is not in the root of your project or is named `.prettierrc`, you can supply a value to the flag like this:
-
-```bash
-npx better-supabase-types -i ./src/schema.ts -o ./src/newSchema.ts -p ./configs/.prettierrc.yaml
-```
-
-### Creating singular model type names from plural table names
-
-If you use the common naming pattern of having plural table names, it can be confusing when the model type is also a plural, as it gives the impression that it represents more than one record. You can ask `better-supabase-types` to transform the model type name into the singular form (using the `pluralize` library) with the `singular` flag (`-s`). By default this is set to false (turned off).
-
-```bash
-npx better-supabase-types -i ./src/schema.ts -o ./src/newSchema.ts -s
-```
-
-Example schema output with the `singular` flag turned on:
-
-```ts
-export type Account = Database['public']['Tables']['accounts']['Row'];
-export type InsertAccount = Database['public']['Tables']['accounts']['Insert'];
-export type UpdateAccount = Database['public']['Tables']['accounts']['Update'];
+Options:
+      --version         Show version number                            [boolean]
+      --help            Show help                                      [boolean]
+  -i, --input           Path to the input file               [string] [required]
+  -o, --output          Path to the output file                         [string]
+  -p, --prettier        Path to the prettier config file
+                                               [string] [default: ".prettierrc"]
+  -f, --force           Force the overwrite of the input file          [boolean]
+  -s, --singular        Convert table names to singular form instead of plural form
+                                                      [boolean] [default: false]
+      --enumAsType      Have converted enums defined as types and not enums
+                                                      [boolean] [default: false]
+      --enumPascalCase  Enums format to pascal case   [boolean] [default: false]
 ```
 
 ### Config file ⚙
