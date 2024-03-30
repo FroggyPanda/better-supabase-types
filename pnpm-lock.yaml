@@ -34,6 +34,9 @@ devDependencies:
   '@types/yargs':
     specifier: ^17.0.24
     version: 17.0.24
+  crlf:
+    specifier: ^1.1.1
+    version: 1.1.1
   eslint:
     specifier: ^8.56.0
     version: 8.56.0
@@ -250,6 +253,14 @@ packages:
 
   /concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
+    dev: true
+
+  /crlf@1.1.1:
+    resolution: {integrity: sha512-L6QfggxXr2vR+trc4LIdrmxWwV88uy2zzFslw1vV/J4WlyeoENlFr+t5V+1Ijq5AV0SexqLEU8GYvzL8Dc2y8Q==}
+    hasBin: true
+    dependencies:
+      glub: 1.0.3
+      transform-file: 1.0.1
     dev: true
 
   /cross-spawn@7.0.3:
@@ -477,6 +488,16 @@ packages:
       is-glob: 4.0.3
     dev: true
 
+  /glob@5.0.15:
+    resolution: {integrity: sha512-c9IPMazfRITpmAAKi22dK1VKxGDX9ehhqfABDriL/lzO92xcUKEJPQHrVA/2YHSNFB4iFlykVmWvwo48nr3OxA==}
+    dependencies:
+      inflight: 1.0.6
+      inherits: 2.0.4
+      minimatch: 3.1.2
+      once: 1.4.0
+      path-is-absolute: 1.0.1
+    dev: true
+
   /glob@7.1.6:
     resolution: {integrity: sha512-LwaxwyZ72Lk7vZINtNNrywX0ZuLyStrdDtabefZKAY5ZGJhVtgdznluResxNmPitE0SAO+O26sWTHeKSI2wMBA==}
     dependencies:
@@ -493,6 +514,14 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       type-fest: 0.20.2
+    dev: true
+
+  /glub@1.0.3:
+    resolution: {integrity: sha512-jc6aFV4ndsH/3aCwOQ+F4hS9AHdmwA5RS3uiFeLu19eNQ9EQeu9bNFJdNlShIxwYMS9CZkCpEC4vY5ZIgppN7Q==}
+    hasBin: true
+    dependencies:
+      glob: 5.0.15
+      minimist: 1.2.8
     dev: true
 
   /graphemer@1.4.0:
@@ -631,6 +660,10 @@ packages:
       brace-expansion: 2.0.1
     dev: false
 
+  /minimist@1.2.8:
+    resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
+    dev: true
+
   /mkdirp@2.1.6:
     resolution: {integrity: sha512-+hEnITedc8LAtIP9u3HJDFIdcLV2vXP33sqLLIzkv1Db1zO/1OxbvYf0Y1OC/S/Qo5dxHXepofhmxL02PsKe+A==}
     engines: {node: '>=10'}
@@ -661,6 +694,11 @@ packages:
       levn: 0.4.1
       prelude-ls: 1.2.1
       type-check: 0.4.0
+    dev: true
+
+  /os-tmpdir@1.0.2:
+    resolution: {integrity: sha512-D2FR03Vir7FIu45XBY20mTb+/ZSWB00sjU9jdQXt83gDrI4Ztz5Fs7/yy74g2N5SVQY4xY1qDr4rNddwYRVX0g==}
+    engines: {node: '>=0.10.0'}
     dev: true
 
   /p-limit@3.1.0:
@@ -806,6 +844,12 @@ packages:
     dependencies:
       is-number: 7.0.0
     dev: false
+
+  /transform-file@1.0.1:
+    resolution: {integrity: sha512-mAglTF9+3umkYu8lhseHW3/465Gt1HyLDrlnqrK9ZAa+hMzzkgsCIZzlfHv9JBL2480AOxLoU8WK9RjCeLhOvg==}
+    dependencies:
+      os-tmpdir: 1.0.2
+    dev: true
 
   /ts-morph@18.0.0:
     resolution: {integrity: sha512-Kg5u0mk19PIIe4islUI/HWRvm9bC1lHejK4S0oh1zaZ77TMZAEmQC0sHQYiu2RgCQFZKXz1fMVi/7nOOeirznA==}
