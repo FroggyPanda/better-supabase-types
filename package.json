@@ -7,12 +7,12 @@
   "main": "src/index.js",
   "bin": "src/index.js",
   "private": false,
-  "version": "2.7.5",
+  "version": "2.7.6",
   "license": "MIT",
   "type": "module",
   "scripts": {
     "lint": "prettier \"src/**/**.js\" --check && eslint \"src/**/**.js\" && tsc",
-    "format": "prettier \"src/**/**.js\" --write"
+    "format": "prettier \"src/**/**.js\" --write && crlf --set=LF \"src/**/**.js\""
   },
   "dependencies": {
     "chalk": "^4.1.2",
@@ -26,6 +26,7 @@
     "@types/node": "^18.15.13",
     "@types/pluralize": "^0.0.29",
     "@types/yargs": "^17.0.24",
+    "crlf": "^1.1.1",
     "eslint": "^8.56.0",
     "typescript": "^5.3.3"
   },
